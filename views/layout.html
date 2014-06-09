@@ -1,10 +1,9 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<title>{% block title %}{% endblock %}</title>
+		<title>Arianne : 0.0.0</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-		<link href="/css/app.css" rel="stylesheet">
 	</head>
 	<body>
 		<div class="container" ng-app="InstallationSearch" ng-controller="SearchController">
@@ -16,19 +15,32 @@
 								placeholder="Search Customers"
 								class="form-control"
 								ng-model="searchValue"
-								ng-change="searchCustomers()"
+								ng-change="searchInstallations()"
 								/>
+					</div>
+					<div class="list-group">
+						<a href="#"
+							class="list-group-item"
+							ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}" 
+							ng-repeat="installation in installations"
+							>
+							<h4 class="list-group-item-heading"><%= installation.name %></h4>
+    						<p class="list-group-item-text">Server: <%= installation.server %></p>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-2">
+					<div class="panel panel-default">
+				 		<div class="panel-heading">Panel heading without title</div>
+					 	<div class="panel-body">
+					    	Panel content
 						</div>
-						<div class="list-group">
-							<div
-								class="list-group-item"
-								ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}" 
-								ng-repeat="customer in customers"
-								>
-								<h2><%= customer.name %></h2>
-								<p>Server: <%= customer.server %></p>
-							</div>
-						</div>
+					</div>
+				</div>
+				<div class="col-md-10">
+					<ng-view />
 				</div>
 			</div>
 		</div>

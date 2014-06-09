@@ -21,7 +21,7 @@ InstallationSearch.controller('SearchController', function ($scope, $http, $_) {
 		server: '10.0.0.3'
 	},
 	{
-		name: 'ArgoTrack', 
+		name: 'ArgoTrrack', 
 		server: '10.0.0.3'
 	},
 	{
@@ -29,10 +29,10 @@ InstallationSearch.controller('SearchController', function ($scope, $http, $_) {
 		server: '10.0.0.3'
 	}];
 
-	$scope.searchCustomers = function () {
+	$scope.searchInstallations = function () {
 		if($scope.searchValue.length > 2) {
-			$scope.customers = $_.filter(metaCustomers, function (customer) {
-				return $_.contains(customer.name, $scope.searchValue);
+			$scope.installations = $_.filter(metaCustomers, function (installation) {
+				return $_.contains(installation.name, $scope.searchValue);
 			});
 		} else {
 			$scope.customers = [];
