@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+	<head>
+		{% include "./templates/head_template.html" %}
+	</head>
+	<body class="container">
+		<div class="row">
+			<div class="col-md-4 col-md-offset-4">
+				<form action="/login" method="post">
+					{% include "./templates/username_password_form.html" %}
+				</form>
+				<p>Not registered? Please, <a href="/signup">signup</a></p>
+			</div>
+		</div>
+	</body>
+</html>

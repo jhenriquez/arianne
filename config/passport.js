@@ -1,4 +1,5 @@
 var passport = require('passport'),
+	LocalStrategy = require('passport-local').Strategy,
 	User = require('../models/user');
 
 
@@ -12,9 +13,9 @@ passport.deserializeUser(function(user, done) {
 	});
 });
 
-passport.use('user-local-signup', new LocalStrategy(
+passport.use('user-local-signup', new LocalStrategy({ passReqToCallback : true },
 	function(rq, username, password, done) {
-		User.findOne({'username': username}, function(err, author) {
+		User.findOne({'username': username}, function(err, user) {
 			if(err)
 				return done(err);
 
@@ -24,24 +25,24 @@ passport.use('user-local-signup', new LocalStrategy(
 
 		var newUser = new User();
 
-		newUser.username = email;
+		newUser.username = username;
 		newUser.setPassword(password);
 
-		newAuthor.save(function (err) {
+		newUser.save(function (err) {
 			if(err) 
 				return done(err);
-			return done(null,newAuthor);
+			return done(null,newUser);
 		});
 	})	
 );
 
-passport.use('user-local-login', new LocalStrategy(
+passport.use('user-local-login', new LocalStrategy({ passReqToCallback : true },
 function (rq, username, password, done) {
-	Author.findOne({ 'username' : username }, function (err, user) {
+	User.findOne({ 'username' : username }, function (err, user) {
 		if(err)
 			return done(err);
 		if(!user)
-			return done(null, false, rq.flash('login_message', 'This username/email does not exist.'));
+			return done(null, false, rq.flash('login_message', 'Username does not exist.'));
 		if(!user.validPassword(password))
 			return done(null, false, rq.flash('login_message', 'Invalid password.'));
 		done(null, user);

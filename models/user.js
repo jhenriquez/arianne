@@ -10,15 +10,15 @@ var userSchema = new Schema({
 });
 
 userSchema.methods.setPassword = function (password) {
-	this.password = bcrypt.hashSync(password, 20);
+	this.password = bcrypt.hashSync(password, 8);
 };
 
 userSchema.methods.validPassword = function (password) {
-	bcrypt.compareSync(password, this.password);
+	return bcrypt.compareSync(password, this.password);
 };
 
 userSchema.statics.hashPassword = function (password) {
-	return bcryptSync(password, 20);
+	return bcrypt.hashSync(password, 8);
 };
 
 module.exports = goose.model('User', userSchema);

@@ -15,7 +15,7 @@ var express = require('express'),
 var passport = require('./config/passport'),
 	databases = require('./config/databases'),
 	routes = require('./routes'),
-	api = requrie('./routes/api');
+	api = require('./routes/api');
 
 // configure View Engine
 app.engine('html', swig.renderFile);
@@ -35,7 +35,7 @@ app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
 
 // initialize routes (html and api)
-routes();
+routes(app, passport);
 api();
 
 //  initialize mongoose data connection
