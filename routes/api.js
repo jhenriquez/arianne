@@ -8,8 +8,4 @@ module.exports = function (app) {
 				return rs.json(installations);
 			});
 	});
-
-	app.get('/api/installation', function (rq, rs) {
-		return rs.json([]);
-	});
 };
