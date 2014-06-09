@@ -20,10 +20,10 @@
 						<a href="#"
 							class="list-group-item"
 							ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}" 
-							ng-repeat="installation in installations"
+							ng-repeat="installation in installations track by $index"
 							>
-							<h4 class="list-group-item-heading"><%= installation.name %></h4>
-    						<p class="list-group-item-text">Server: <%= installation.server %></p>
+							<h4 class="list-group-item-heading"><%= installation.site %></h4>
+    						<p class="list-group-item-text">Server: <%= installation.dbase %></p>
 						</a>
 					</div>
 				</div>
@@ -37,10 +37,9 @@
 								<a href="#"
 									class="list-group-item"
 									ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}" 
-									ng-repeat="installation in installations"
 									>
-								<h4 class="list-group-item-heading"><%= installation.name %></h4>
-	    						<p class="list-group-item-text">Server: <%= installation.server %></p>
+								<h4 class="list-group-item-heading"><%= installation.site %></h4>
+	    						<p class="list-group-item-text">Server: <%= installation.site %></p>
 						</a>
 					</div>
 						</div>
@@ -52,8 +51,8 @@
 			</div>
 		</div>
 		<!-- JavaScript libraries -->
-		<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-resource.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 

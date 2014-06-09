@@ -1,5 +1,5 @@
 var goose = require('mongoose'),
-	bcrypt = require('bcrypt'),
+	bcrypt = require('bcrypt-nodejs'),
 	Schema = goose.Schema;
 
 
@@ -10,7 +10,7 @@ var userSchema = new Schema({
 });
 
 userSchema.methods.setPassword = function (password) {
-	this.password = bcrypt.hashSync(password, 8);
+	this.password = bcrypt.hashSync(password);
 };
 
 userSchema.methods.validPassword = function (password) {
@@ -18,7 +18,7 @@ userSchema.methods.validPassword = function (password) {
 };
 
 userSchema.statics.hashPassword = function (password) {
-	return bcrypt.hashSync(password, 8);
+	return bcrypt.hashSync(password);
 };
 
 module.exports = goose.model('User', userSchema);

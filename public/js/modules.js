@@ -4,9 +4,8 @@ angular.module('LoDashIntegration', [])
 		return window._;
 	});
 
-angular.module('InstallationSearch', ['LoDashIntegration'])
+angular.module('InstallationSearch', ['ngResource'])
 	.config(function($interpolateProvider) {
 		$interpolateProvider.startSymbol('<%=');
 		$interpolateProvider.endSymbol('%>');
 	});
-

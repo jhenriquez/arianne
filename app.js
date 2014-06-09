@@ -3,6 +3,7 @@
 // declare general dependencies
 var express = require('express'),
 	morgan = require('morgan'),
+	params = require('express-params'),
 	goose = require('mongoose'),
 	body = require('body-parser'),
 	cookie = require('cookie-parser'),
@@ -22,6 +23,7 @@ app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 
 // configure Middleware
+params.extend(app);
 app.use(morgan());
 app.use(body());
 app.use(cookie());
@@ -36,7 +38,7 @@ app.use(express.static(__dirname + '/public'));
 
 // initialize routes (html and api)
 routes(app, passport);
-api();
+api(app);
 
 //  initialize mongoose data connection
 goose.connect(databases.oberyn);

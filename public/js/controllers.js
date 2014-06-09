@@ -2,40 +2,22 @@
 
 var InstallationSearch = angular.module('InstallationSearch');
 
-InstallationSearch.controller('SearchController', function ($scope, $http, $_) {
-	var metaCustomers = [
-	{
-		name: 'ArgoTrak', 
-		server: '10.0.0.1'
-	},
-	{
-		name: 'Brickhouse', 
-		server: '10.0.0.2'
-	},
-	{
-		name: 'Consatel', 
-		server: '10.0.0.3'
-	},
-	{
-		name: 'Guideon', 
-		server: '10.0.0.3'
-	},
-	{
-		name: 'ArgoTrrack', 
-		server: '10.0.0.3'
-	},
-	{
-		name: 'ArgoTrac', 
-		server: '10.0.0.3'
-	}];
+InstallationSearch.controller('SearchController', function ($scope, $resource) {
 
 	$scope.searchInstallations = function () {
-		if($scope.searchValue.length > 2) {
-			$scope.installations = $_.filter(metaCustomers, function (installation) {
-				return $_.contains(installation.name, $scope.searchValue);
+		if(!$scope.searchValue) {
+			$scope.installations = [];
+			return;
+		}
+
+		var _resource = $resource('/api/installation/:search');
+			var installations = _resource.query({'search' : $scope.searchValue }, function () {
+				$scope.installations = installations;
 			});
+		/*if($scope.searchValue.length > 2) {
+			
 		} else {
 			$scope.installations = [];
-		}
+		}*/
 	}
 });

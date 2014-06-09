@@ -1,5 +1,5 @@
 module.exports = function (app, passport) {
-	app.get('/', Authentication, function (rq, rs) {
+	app.get('/', function (rq, rs) {
 		rs.render('home', { user: rq.user });
 	});
 
