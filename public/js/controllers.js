@@ -35,7 +35,7 @@ InstallationSearch.controller('SearchController', function ($scope, $http, $_) {
 				return $_.contains(installation.name, $scope.searchValue);
 			});
 		} else {
-			$scope.customers = [];
+			$scope.installations = [];
 		}
 	}
 });
