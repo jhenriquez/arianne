@@ -20,9 +20,9 @@
 						<a href="#"
 							class="list-group-item"
 							ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}" 
-							ng-repeat="installation in installations track by $index"
+							ng-repeat="installation in installations"
 							>
-							<h4 class="list-group-item-heading"><%= installation.site %></h4>
+							<h4 class="list-group-item-heading"><%= installation.name %></h4>
     						<p class="list-group-item-text">Server: <%= installation.dbase %></p>
 						</a>
 					</div>
@@ -59,6 +59,7 @@
 		<!-- Application Specific JavaScript -->
 		<script src="/js/app.js"></script>
 		<script src="/js/modules.js"></script>
+		<script src="/js/factories.js"></script>
 		<script src="/js/controllers.js"></script>
 	</body>
 </html>
