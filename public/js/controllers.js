@@ -22,5 +22,9 @@ angular.module('InstallationSearch')
 		var installation = $installationService.get({ name: $routeParams.name }, function () {
 			$scope.isLoading = false;
 			$scope.name = installation.name;
+			$scope.dbase = installation.dbase;
+			$scope.connectionString = installation.connectionString;
+			$scope.engine = installation.engine;
+			$scope.mailSenderName = installation.mailSenderName;
 		});
 	});
