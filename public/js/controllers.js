@@ -15,6 +15,7 @@ angular.module('InstallationSearch')
 
 		$scope.selectCustomer = function () {
 			$scope.installations = [];
+			$scope.searchValue = '';
 		}
 	})
 	.controller('InstallationController', function($scope, $installationService, $routeParams) {

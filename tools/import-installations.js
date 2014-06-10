@@ -16,7 +16,8 @@ var cn = new sql.Connection(config, function (err) {
 
 	cn.request().query("SELECT * FROM [PositionLogic].[dbo].[Site] WHERE [Status] = 'A'", function (err, rows) {
 		if(err) throw err;
-
+		console.log(rows.pop());
+		/*
 		rows.forEach(function (row) {
 			var newInstallation = new Installation();
 			newInstallation.name = row.SiteName;
@@ -29,5 +30,6 @@ var cn = new sql.Connection(config, function (err) {
 				console.log(installation.name);
 			});
 		});
+		*/
 	});
 });
