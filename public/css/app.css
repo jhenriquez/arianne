@@ -1,0 +1,14 @@
+#login-form  {
+	-webkit-animation: fadeInRight 0.5s;
+    animation: fadeInRight 0.20s;
+}
+
+#search-box {
+	-webkit-animation: bounceInRight 0.5s;
+    animation: bounceInRight 0.10s;	
+}
+
+#recent-activity {
+	-webkit-animation: bounceInLeft 0.5s;
+    animation: bounceInLeft 0.10s;	
+}

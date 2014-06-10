@@ -12,6 +12,10 @@ angular.module('InstallationSearch')
 				$scope.installations = installations;
 			});
 		}
+
+		$scope.selectCustomer = function () {
+			$scope.installations = [];
+		}
 	})
 	.controller('InstallationController', function($scope, $installationService, $routeParams) {
 		$scope.isLoading = true;

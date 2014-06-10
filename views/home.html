@@ -7,7 +7,7 @@
 		<div class="container" ng-app="InstallationSearch" ng-controller="SearchController">
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3">
-					<div class="form-group">
+					<div id="search-box" class="form-group">
 							<input
 								type="text"
 								placeholder="Search Customers"
@@ -16,11 +16,11 @@
 								ng-change="searchInstallations()"
 								/>
 					</div>
-					<div class="list-group">
+					<div id="search-results" class="list-group">
 						<a href="#<%=installation.name%>"
 							class="list-group-item"
-							ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}" 
 							ng-repeat="installation in installations"
+							ng-click="selectCustomer()"
 							>
 							<h4 class="list-group-item-heading"><%= installation.name %></h4>
     						<p class="list-group-item-text">Server: <%= installation.dbase %></p>
@@ -28,7 +28,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<div id="recent-activity" class="row">
 				<div class="col-md-3">
 					<div class="panel panel-default">
 				 		<div class="panel-heading">Recent Actity</div>
@@ -45,7 +45,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-9">
+				<div id="partial-view" class="col-md-9">
 					<ng-view />
 				</div>
 			</div>
