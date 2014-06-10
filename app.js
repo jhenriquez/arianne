@@ -35,6 +35,7 @@ app.use(passport.session());
 
 // configure Static Content
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/views/partials'));
 
 // initialize routes (html and api)
 routes(app, passport);

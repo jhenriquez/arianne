@@ -1,11 +1,15 @@
+"use strict";
 
-angular.module('LoDashIntegration', [])
-	.factory('$_', function() {
-		return window._;
-	});
-
-angular.module('InstallationSearch', ['ngResource'])
-	.config(function($interpolateProvider) {
+angular.module('InstallationSearch', ['ngResource', 'ngRoute'])
+	.config(function($interpolateProvider, $routeProvider) {
+		// configure angular binding interpolation symbols
 		$interpolateProvider.startSymbol('<%=');
 		$interpolateProvider.endSymbol('%>');
+
+		// configure routes
+		$routeProvider
+			.when('/:name', {
+				templateUrl: 'installation-general.html',
+				controller: 'InstallationController'
+			});
 	});

@@ -8,8 +8,15 @@ angular.module('InstallationSearch')
 				return;
 			}
 
-			var installations = $installationService.query({'search' : $scope.searchValue }, function () {
+			var installations = $installationService.search({for: $scope.searchValue }, function () {
 				$scope.installations = installations;
 			});
 		}
+	})
+	.controller('InstallationController', function($scope, $installationService, $routeParams) {
+		$scope.isLoading = true;
+		var installation = $installationService.get({ name: $routeParams.name }, function () {
+			$scope.isLoading = false;
+			$scope.name = installation.name;
+		});
 	});
