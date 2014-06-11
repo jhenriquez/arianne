@@ -21,7 +21,7 @@ angular.module('InstallationSearch')
 			$scope.searchValue = '';
 		}
 	})
-	.controller('InstallationController', function($scope, $installationService, $routeParams) {
+	.controller('InstallationController', function($scope, $installationService, $routeParams, $interval) {
 		$installationService.get({ name: $routeParams.name }, function (installation) {
 			$scope.name = installation.name;
 			$scope.dbase = installation.dbase;
@@ -29,4 +29,13 @@ angular.module('InstallationSearch')
 			$scope.engine = installation.engine;
 			$scope.mailSenderName = installation.mailSenderName;
 		});
+		$scope.isLoading = true;
+		$interval(function () { 
+			$installationService.stats({ name: $scope.name }, function (server) {
+				$scope.isLoading = false;
+				if(server.name === "ConnectionError") {
+					return $scope.serverStats = [{process: 'Something went wrong!'}];
+				}
+				$scope.serverStats = server.processing;
+		})}, 10000);
 	});

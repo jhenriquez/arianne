@@ -4,8 +4,14 @@
 	<p><strong>Engine Server:</strong> <%=engine%></p>
 	
 	<h4>Processing Health</h4>
-	<div ng-class="parsing_health()">Parsing Stats: <%=parsingStats%></div>
-	<div ng-class="alert_health()">Alert Stats: <%=parsingStats%></div>
+	<img src="/img/loading.gif" ng-show="isLoading" />
+	<div class="item-group">
+		<div class="list-group-item"
+			ng-repeat="process in serverStats"
+			>
+			<%=process.process%> : <%=process.delta%>
+		</div>
+	</div>
 
 	<h4>Alerts Health</h4>
 	<div class="alert alert-info">Generated: <%=alertsGenerated%></div>

@@ -16,20 +16,25 @@ var cn = new sql.Connection(config, function (err) {
 
 	cn.request().query("SELECT * FROM [PositionLogic].[dbo].[Site] WHERE [Status] = 'A'", function (err, rows) {
 		if(err) throw err;
-		console.log(rows.pop());
-		/*
+		var total = 0;
 		rows.forEach(function (row) {
-			var newInstallation = new Installation();
-			newInstallation.name = row.SiteName;
-			newInstallation.site = row.SiteName;
-			newInstallation.dbase = row.DBServer;
-			newInstallation.connectionString = row.ConnectionString;
-			newInstallation.engine = row.MsgEngineServer;
-			newInstallation.save(function (err, installation, affected) {
-				if(err) throw err;
-				console.log(installation.name);
-			});
+
+			Installation.update({name: rows.SiteName},
+				{ 
+					name: row.SiteName,
+					site: row.SiteName,
+					dbase: row.DBServer,
+					connectionString: row.ConnectionString,
+					engine: row.MsgEngineServer
+				 }, 
+				{ upsert : true }, function (err, updated) {
+					if(err) throw err;
+					total++;
+				});	
 		});
-		*/
+
+		console.log(total);
 	});
+	cn.close();
+	return;
 });
