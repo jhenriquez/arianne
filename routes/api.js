@@ -16,4 +16,15 @@ module.exports = function (app) {
 				return rs.json(installation);
 			});
 	});
+
+	app.get('/api/installation/stats/processing/:name', function (rq, rs) {
+		// This is what should be called to get stat information.
+		// { processing : { parser, alerts, geofence, poi...}, alertSender : { generated, not_sent } }
+	});
+
+	app.get('/api/installation/item/:id', function (rq, rs) {
+	});
+
+	app.get('/api/installation/imei/:imei', function (rq, rs) {
+	});
 };

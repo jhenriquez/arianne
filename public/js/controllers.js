@@ -8,7 +8,10 @@ angular.module('InstallationSearch')
 				return;
 			}
 
-			var installations = $installationService.search({for: $scope.searchValue }, function () {
+			$scope.isLoading = true;
+
+			$installationService.search({for: $scope.searchValue }, function (installations) {
+				$scope.isLoading = false;
 				$scope.installations = installations;
 			});
 		}
@@ -19,9 +22,7 @@ angular.module('InstallationSearch')
 		}
 	})
 	.controller('InstallationController', function($scope, $installationService, $routeParams) {
-		$scope.isLoading = true;
-		var installation = $installationService.get({ name: $routeParams.name }, function () {
-			$scope.isLoading = false;
+		$installationService.get({ name: $routeParams.name }, function (installation) {
 			$scope.name = installation.name;
 			$scope.dbase = installation.dbase;
 			$scope.connectionString = installation.connectionString;

@@ -1,7 +1,7 @@
 "use strict";
 
 angular.module('InstallationSearch', ['ngResource', 'ngRoute'])
-	.config(function($interpolateProvider, $routeProvider) {
+	.config(function($interpolateProvider, $routeProvider, $locationProvider) {
 		// configure angular binding interpolation symbols
 		$interpolateProvider.startSymbol('<%=');
 		$interpolateProvider.endSymbol('%>');
@@ -12,4 +12,5 @@ angular.module('InstallationSearch', ['ngResource', 'ngRoute'])
 				templateUrl: 'installation-general.html',
 				controller: 'InstallationController'
 			});
+		$locationProvider.html5Mode(true);
 	});
