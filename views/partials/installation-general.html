@@ -4,8 +4,35 @@
 	<p><strong>Engine Server:</strong> <%=engine%></p>
 	
 	<h4>Processing Health</h4>
-	<img src="/img/loading.gif" ng-show="isLoading" />
+	<div class="text-center">
+		<img src="/img/loading.gif" ng-show="isLoading" />
+	</div>
 	<div class="item-group">
+		<div class="alert alert-danger clearfix" ng-show="somethingWrong">
+			<span class="glyphicon glyphicon-remove-circle"></span>
+			Something went wrong during the request.
+			<span class="pull-right">
+				<button class="btn btn-sm">
+					<span class="glyphicon glyphicon-repeat"></span>
+				</button>
+			</span>
+		</div>
+		<div class="alert alert-danger clearfix" ng-show="refreshError">
+			<span class="glyphicon glyphicon-remove-circle"></span>
+			Something went wrong refresing the information.
+			<span class="pull-right">
+				<button class="btn btn-sm">
+					<span class="glyphicon glyphicon-repeat"></span>
+				</button>
+			</span>
+		</div>
+		<div class="alert alert-info clearfix">
+			<button class="btn btn-sm text-center"
+					ng-click="refreshProcessing()"
+					ng-show="showRefresh()">
+					<span class="glyphicon glyphicon-refresh"></span>
+			</button>
+		</div>
 		<div class="list-group-item"
 			ng-repeat="process in serverStats"
 			>

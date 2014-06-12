@@ -23,7 +23,7 @@ var cn = new sql.Connection(config, function (err) {
 				{ 
 					$set: { name: row.SiteName },
 					$set: { site: row.SiteName },
-					$set: { dbase: row.DBServer },
+					$set: { dbase: row.DBServer.replace('[','').replace(']','') },
 					$set: { connectionString: row.ConnectionString },
 					$set: { engine: row.MsgEngineServer }
 				 }, 

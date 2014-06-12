@@ -21,19 +21,15 @@ module.exports = function (app) {
 	});
 
 	app.get('/api/installation/stats/processing/:name', function (rq, rs) {
-		// This is what should be called to get stat information.
-		// { processing : { parser, alerts, geofence, poi...}, alertSender : { generated, not_sent } }
 		Installation.findOne({ name: rq.params.name }, 
 			function (err, installation) {
-				if(err) return rs.json({ Error: 'Error Processing Request.'});
-				var svr = installation.dbase.replace('[','').replace(']','');
-				cnn = new sql.Connection({ user : databases.kingslanding.username, password: databases.kingslanding.password, server: svr, database: installation.name }, function (err) {
+				if(err) return console.log(err);
+				cnn = new sql.Connection({ user : databases.kingslanding.username, password: databases.kingslanding.password, server: installation.dbase, database: installation.name }, function (err) {
 					if (err) return rs.json(err);
 
 					cnn.request().query("DECLARE @MAXID INT = (SELECT MAX(MessageID) FROM [Message].[Raw]) SELECT ProcessName, LastID, LastActivityDate, @MAXID - LastID AS Delta FROM [dbo].[ProcessHistory] WHERE ProcessName LIKE 'Engine%'",
 						function (err, rows) {
 							if(err) return rs.json(err);
-							var server = { processing : [] };
 							rows.forEach(function (row) {
 								server.processing.push({
 									process: row.ProcessName,

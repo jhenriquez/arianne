@@ -28,14 +28,40 @@ angular.module('InstallationSearch')
 			$scope.connectionString = installation.connectionString;
 			$scope.engine = installation.engine;
 			$scope.mailSenderName = installation.mailSenderName;
+
+			$scope.performRequest();
 		});
-		$scope.isLoading = true;
-		$interval(function () { 
+
+		$scope.performRequest = function performRequest () {
+			if($scope.repeatLoading === undefined)
+				$scope.isLoading = true;
+
 			$installationService.stats({ name: $scope.name }, function (server) {
-				$scope.isLoading = false;
-				if(server.name === "ConnectionError") {
-					return $scope.serverStats = [{process: 'Something went wrong!'}];
+				if($scope.repeatLoading === undefined) {
+					$scope.isLoading = false;
+				} else {
+					$scope.repeatLoading = false;
 				}
+
+				if(server.name === "ConnectionError") {
+					if($scope.refreshError === undefined) {
+						return $scope.somethingWrong = true;
+					} else {
+						$scope.refreshError = true;
+					}
+				}
+
 				$scope.serverStats = server.processing;
-		})}, 10000);
+			});
+		};
+
+		$scope.refreshProcessing = function refreshProcessing () {
+			$scope.repeatLoading = true;
+			$scope.refreshError = false;
+			$scope.performRequest();
+		};
+
+		$scope.showRefresh = function showRefresh () {
+			return !$scope.somethingIsWrong && !$scope.repeatLoading;
+		};
 	});
