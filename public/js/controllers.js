@@ -33,8 +33,10 @@ angular.module('InstallationSearch')
 		});
 
 		$scope.performRequest = function performRequest () {
-			if($scope.repeatLoading === undefined)
+			if($scope.repeatLoading === undefined) {
 				$scope.isLoading = true;
+				$scope.somethingWrong = false;
+			}
 
 			$installationService.stats({ name: $scope.name }, function (server) {
 				if($scope.repeatLoading === undefined) {
@@ -62,6 +64,8 @@ angular.module('InstallationSearch')
 		};
 
 		$scope.showRefresh = function showRefresh () {
-			return !$scope.somethingIsWrong && !$scope.repeatLoading;
+			if($scope.somethingWrong === undefined || !$scope.somethingWrong)
+				return false;
+			return !$scope.somethingWrong && !$scope.repeatLoading;
 		};
 	});
