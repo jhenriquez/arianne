@@ -49,10 +49,10 @@ angular.module('InstallationSearch')
 					if($scope.refreshError === undefined) {
 						return $scope.somethingWrong = true;
 					} else {
-						$scope.refreshError = true;
+						return $scope.refreshError = true;
 					}
 				}
-
+				$scope.somethingWrong = false;
 				$scope.serverStats = server.processing;
 			});
 		};

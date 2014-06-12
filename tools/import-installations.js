@@ -19,7 +19,7 @@ var cn = new sql.Connection(config, function (err) {
 		var total = 0;
 		rows.forEach(function (row) {
 
-			Installation.update({name: rows.SiteName},
+			Installation.update({name: row.SiteName},
 				{ 
 					$set: { name: row.SiteName },
 					$set: { site: row.SiteName },
