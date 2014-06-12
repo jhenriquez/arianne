@@ -9,11 +9,7 @@
 		<div class="list-group-item"
 			ng-repeat="process in serverStats"
 			>
-			<%=process.process%> : <%=process.delta%>
+			<%=process.process%> : <%=process.delta %>
 		</div>
 	</div>
-
-	<h4>Alerts Health</h4>
-	<div class="alert alert-info">Generated: <%=alertsGenerated%></div>
-	<div ng-class="alert_sender_health()">Sent: <%=alertsGenerated%></div>
 </div>

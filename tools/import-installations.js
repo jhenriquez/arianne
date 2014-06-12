@@ -21,11 +21,11 @@ var cn = new sql.Connection(config, function (err) {
 
 			Installation.update({name: rows.SiteName},
 				{ 
-					name: row.SiteName,
-					site: row.SiteName,
-					dbase: row.DBServer,
-					connectionString: row.ConnectionString,
-					engine: row.MsgEngineServer
+					$set: { name: row.SiteName },
+					$set: { site: row.SiteName },
+					$set: { dbase: row.DBServer },
+					$set: { connectionString: row.ConnectionString },
+					$set: { engine: row.MsgEngineServer }
 				 }, 
 				{ upsert : true }, function (err, updated) {
 					if(err) throw err;
