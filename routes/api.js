@@ -2,6 +2,11 @@ var Installation = require('../models/installation'),
 	databases = require('../config/databases'),
 	sql = require('mssql');
 
+var PROCESSES_QUERY =
+    "DECLARE @MAXID BIGINT = (SELECT MAX(MessageID) FROM [Message].[Raw]) " +
+    "SELECT ProcessName, LastID, LastActivityDate, @MAXID - LastID AS Delta " +
+    "FROM [dbo].[ProcessHistory] (nolock) " +
+    "WHERE ProcessName LIKE 'Engine%' ";
 
 module.exports = function (app) {
 	app.get('/api/installation/search/:search', function (rq, rs) {
@@ -27,19 +32,22 @@ module.exports = function (app) {
 				cnn = new sql.Connection({ user : databases.kingslanding.username, password: databases.kingslanding.password, server: installation.dbase, database: installation.name }, function (err) {
 					if (err) return rs.json(err);
 
-					cnn.request().query("DECLARE @MAXID INT = (SELECT MAX(MessageID) FROM [Message].[Raw]) SELECT ProcessName, LastID, LastActivityDate, @MAXID - LastID AS Delta FROM [dbo].[ProcessHistory] WHERE ProcessName LIKE 'Engine%'",
-						function (err, rows) {
-							if(err) return rs.json(err);
-							rows.forEach(function (row) {
-								server.processing.push({
-									process: row.ProcessName,
-									currentID: row.LastID,
-									lastActivity: row.LastActivityDate,
-									delta: row.Delta
-								});
-							});
-							return rs.json(server);
-						});
+                    var server = { processing : []};
+
+					cnn.request().query(PROCESSES_QUERY, function (err, rows) {
+                        if(err) return rs.json(err);
+
+                        rows.forEach(function (row) {
+                            server.processing.push({
+                                process: row.ProcessName,
+                                currentID: row.LastID,
+                                lastActivity: row.LastActivityDate,
+                                delta: row.Delta
+                            });
+                        });
+
+                        return rs.json(server);
+                    });
 
 				});
 			});

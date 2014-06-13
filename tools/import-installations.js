@@ -17,24 +17,31 @@ var cn = new sql.Connection(config, function (err) {
 	cn.request().query("SELECT * FROM [PositionLogic].[dbo].[Site] WHERE [Status] = 'A'", function (err, rows) {
 		if(err) throw err;
 		var total = 0;
+
 		rows.forEach(function (row) {
 
 			Installation.update({name: row.SiteName},
 				{ 
-					$set: { name: row.SiteName },
-					$set: { site: row.SiteName },
-					$set: { dbase: row.DBServer.replace('[','').replace(']','') },
-					$set: { connectionString: row.ConnectionString },
-					$set: { engine: row.MsgEngineServer }
-				 }, 
-				{ upsert : true }, function (err, updated) {
+                    $set : {
+                        name: row.SiteName,
+                        site: row.DataBaseName,
+                        dbase: row.DBServer.replace('[','').replace(']',''),
+                        connectionString: row.ConnectionString,
+                        engine: row.MsgEngineServer
+                    }
+				},
+                { upsert : true },
+                function (err, updated) {
 					if(err) throw err;
 					total++;
+
+                    if(total == rows.length) {
+                        console.log(total);
+
+                        mongoose.disconnect();
+                        cn.close();
+                    }
 				});	
 		});
-
-		console.log(total);
 	});
-	cn.close();
-	return;
 });

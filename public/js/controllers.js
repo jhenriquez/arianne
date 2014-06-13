@@ -64,8 +64,6 @@ angular.module('InstallationSearch')
 		};
 
 		$scope.showRefresh = function showRefresh () {
-			if($scope.somethingWrong === undefined || !$scope.somethingWrong)
-				return false;
-			return !$scope.somethingWrong && !$scope.repeatLoading;
+			return $scope.serverStats != undefined;
 		};
 	});
