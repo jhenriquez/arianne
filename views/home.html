@@ -30,20 +30,14 @@
 			</div>
 			<div id="recent-activity" class="row">
 				<div class="col-md-3">
-					<div class="panel panel-default">
-				 		<div class="panel-heading">Recent Actity</div>
-					 	<div class="panel-body">
-					 		<div class="list-group">
-								<a href="#"
-									class="list-group-item"
-									ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}" 
-									>
-								<h4 class="list-group-item-heading"><%= installation.site %></h4>
-	    						<p class="list-group-item-text">Server: <%= installation.site %></p>
-						</a>
-					</div>
-						</div>
-					</div>
+					<ul class="nav nav-pills nav-stacked">
+						<li>
+							<a href="#">Installation Information</a>
+						</li>
+						<li>
+							<a href="#">Unit Troubleshooting</a>
+						</li>
+					</ul>
 				</div>
 				<div id="partial-view" class="col-md-9">
 					<ng-view />
