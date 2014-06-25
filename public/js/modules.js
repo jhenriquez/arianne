@@ -12,5 +12,4 @@ angular.module('InstallationSearch', ['ngResource', 'ngRoute'])
 				templateUrl: 'installation-general.html',
 				controller: 'InstallationController'
 			});
-		$locationProvider.html5Mode(true);
 	});

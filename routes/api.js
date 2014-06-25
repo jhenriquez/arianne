@@ -17,11 +17,11 @@ module.exports = function (app) {
 			});
 	});
 
-	app.get('/api/installation/:name', function (rq, rs, next) {
+	app.get('/api/installation/:name', function (rq, rs) {
 		Installation.findOne({ name: rq.params.name }, 
 			function (err, installation) {
-				if(err) return rs.json([{ Error : err }]);
-				return rs.json(installation);
+				if(err) return rs.json({ Error : err });
+				rs.json(installation);
 			});
 	});
 

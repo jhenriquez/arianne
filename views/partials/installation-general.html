@@ -1,8 +1,8 @@
 <div ng-controller="InstallationController">
 	<h4>General Information</h4>
-	<p><strong>Server IP:</strong> <%=dbase%></p>
-	<p><strong>Engine Server:</strong> <%=engine%></p>
-	<p><strong>Connection String:</strong> <%=connectionString%></p>
+	<p><strong>Server IP:</strong> <%=installation.dbase%></p>
+	<p><strong>Engine Server:</strong> <%=installation.engine%></p>
+	<p><strong>Connection String:</strong> <%=installation.connectionString%></p>
 
 	<h4>Processing Health</h4>
 	<div class="text-center">
@@ -13,7 +13,7 @@
 			<span class="glyphicon glyphicon-remove-circle"></span>
 			Something went wrong during the request.
 			<span class="pull-right">
-				<button class="btn btn-sm" ng-click="performRequest()">
+				<button class="btn btn-sm" ng-click="requestStats()">
 					<span class="glyphicon glyphicon-repeat"></span>
 				</button>
 			</span>

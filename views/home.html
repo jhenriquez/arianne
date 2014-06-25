@@ -20,7 +20,7 @@
 						<a href="#<%=installation.name%>"
 							class="list-group-item"
 							ng-repeat="installation in installations"
-							ng-click="selectCustomer()"
+							ng-click="selectCustomer(installation)"
 							>
 							<h4 class="list-group-item-heading"><%= installation.name %></h4>
     						<p class="list-group-item-text">Server: <%= installation.dbase %></p>
@@ -30,9 +30,9 @@
 			</div>
 			<div id="recent-activity" class="row">
 				<div class="col-md-3">
-					<ul class="nav nav-pills nav-stacked">
+					<ul class="nav nav-pills nav-stacked" ng-show="showNavigation()">
 						<li>
-							<a href="#">Installation Information</a>
+							<a href="#<%=installation.name%>">Installation Information</a>
 						</li>
 						<li>
 							<a href="#">Unit Troubleshooting</a>
