@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('InstallationSearch')
+angular.module('ApplicationModule')
 	.factory('$installationService', function ($resource) {
 		return $resource('/api/installation/:name', {},{
 			get: { url: '/api/installation/:name', method: 'get', isArray: false },

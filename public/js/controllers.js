@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('InstallationSearch')
+angular.module('ApplicationModule')
 	.controller('SearchController', function ($scope, $installationService, $current) {
 
 		$scope.searchInstallations = function searchInstallations () {
@@ -28,7 +28,6 @@ angular.module('InstallationSearch')
 		};
 	})
 	.controller('InstallationController', function ($scope, $installationService, $routeParams, $current) {
-
 		$scope.requestStats = function requestStats () {
 			if($scope.repeatLoading === undefined) {
 				$scope.isLoading = true;
@@ -69,8 +68,9 @@ angular.module('InstallationSearch')
 			$scope.installation = $current.installation;
 			$scope.requestStats();
 		} else {
-			$current.installation = $installationService.get({ name: $routeParams.name }, function () {
-				 $scope.requestStats();
+			$installationService.get({ name: $routeParams.installation }, function (installation) {
+				$current.installation = installation;
+				$scope.requestStats();
 			});
 		}
 	});

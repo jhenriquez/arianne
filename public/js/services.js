@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('InstallationSearch')
+angular.module('ApplicationModule')
 	.service('$current', function () {
 		this.installation = undefined;
 	});

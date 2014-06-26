@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('InstallationSearch', ['ngResource', 'ngRoute'])
+angular.module('ApplicationModule', ['ngResource', 'ngRoute'])
 	.config(function($interpolateProvider, $routeProvider, $locationProvider) {
 		// configure angular binding interpolation symbols
 		$interpolateProvider.startSymbol('<%=');
@@ -8,7 +8,7 @@ angular.module('InstallationSearch', ['ngResource', 'ngRoute'])
 
 		// configure routes
 		$routeProvider
-			.when('/:name', {
+			.when('/:installation', {
 				templateUrl: 'installation-general.html',
 				controller: 'InstallationController'
 			});
