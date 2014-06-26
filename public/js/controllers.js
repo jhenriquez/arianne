@@ -1,7 +1,7 @@
 "use strict";
 
 angular.module('InstallationSearch')
-	.controller('SearchController', function ($scope, $installationService) {
+	.controller('SearchController', function ($scope, $installationService, $current) {
 
 		$scope.searchInstallations = function searchInstallations () {
 			if(!$scope.searchValue) {
@@ -20,20 +20,16 @@ angular.module('InstallationSearch')
 		$scope.selectCustomer = function selectCustomer (installation) {
 			$scope.installations = [];
 			$scope.searchValue = '';
-			$scope.installation = installation;
+			$current.installation = installation;
 		};
 
-		$scope.showNavigation = function showNavigation () {
-			return $scope.installation;
+		$scope.current = function current () {
+			return $current.installation;
 		};
-		
 	})
-	.controller('InstallationController', function ($scope, $installationService, $routeParams) {
+	.controller('InstallationController', function ($scope, $installationService, $routeParams, $current) {
 
 		$scope.requestStats = function requestStats () {
-			if (!$scope.installation)
-				return;
-
 			if($scope.repeatLoading === undefined) {
 				$scope.isLoading = true;
 				$scope.somethingWrong = false;
@@ -69,14 +65,12 @@ angular.module('InstallationSearch')
 			return $scope.serverStats != undefined;
 		};
 
-		if($scope.$parent.installation) {
-			$scope.installation = $scope.$parent.installation;
+		if($current.installation) {
+			$scope.installation = $current.installation;
 			$scope.requestStats();
-		}
-
-		if(!$scope.installation && $routeParams.name)
-			$installationService.get({ name: $routeParams.name }, function (installation) {
-				$scope.installation = $scope.$parent.installation = installation;
-				$scope.requestStats();
+		} else {
+			$current.installation = $installationService.get({ name: $routeParams.name }, function () {
+				 $scope.requestStats();
 			});
+		}
 	});

@@ -30,9 +30,9 @@
 			</div>
 			<div id="recent-activity" class="row">
 				<div class="col-md-3">
-					<ul class="nav nav-pills nav-stacked" ng-show="showNavigation()">
+					<ul class="nav nav-pills nav-stacked" ng-show="current()">
 						<li>
-							<a href="#<%=installation.name%>">Installation Information</a>
+							<a href="#<%=current().name%>">Installation Information</a>
 						</li>
 						<li>
 							<a href="#">Unit Troubleshooting</a>
@@ -54,6 +54,7 @@
 		<!-- Application Specific JavaScript -->
 		<script src="/js/app.js"></script>
 		<script src="/js/modules.js"></script>
+		<script src="/js/services.js"></script>
 		<script src="/js/factories.js"></script>
 		<script src="/js/controllers.js"></script>
 	</body>
