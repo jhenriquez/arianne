@@ -20,8 +20,21 @@ module.exports = function (app) {
 	app.get('/api/installation/:name', function (rq, rs) {
 		Installation.findOne({ name: rq.params.name }, 
 			function (err, installation) {
-				if(err) return rs.json({ Error : err });
-				rs.json(installation);
+				if(err) 
+					return rs.json({ 
+						err: err 
+					});
+				if(installation) {
+					rs.json({
+						installation: installation
+					});
+				} else {
+					rs.json({
+						err: {
+							message: 'No Installation Found'
+						}
+					});
+				}
 			});
 	});
 
@@ -53,9 +66,9 @@ module.exports = function (app) {
 			});
 	});
 
-	app.get('/api/installation/item/:id', function (rq, rs) {
+	app.get('/api/item/:id', function (rq, rs) {
 	});
 
-	app.get('/api/installation/imei/:imei', function (rq, rs) {
+	app.get('/api/imei/:imei', function (rq, rs) {
 	});
 };

@@ -27,14 +27,14 @@ angular.module('ApplicationModule')
 			return $current.installation;
 		};
 	})
-	.controller('InstallationController', function ($scope, $installationService, $routeParams, $current) {
+	.controller('InstallationController', function ($scope, $installationService, $routeParams, $current, $location) {
 		$scope.requestStats = function requestStats () {
 			if($scope.repeatLoading === undefined) {
 				$scope.isLoading = true;
 				$scope.somethingWrong = false;
 			}
 
-			$installationService.stats({ name: $scope.installation.name }, function (server) {
+			$installationService.stats({ name: $current.installation.name }, function (server) {
 				if($scope.repeatLoading === undefined) {
 					$scope.isLoading = false;
 				} else {
@@ -64,13 +64,10 @@ angular.module('ApplicationModule')
 			return $scope.serverStats != undefined;
 		};
 
-		if($current.installation) {
-			$scope.installation = $current.installation;
+		$installationService.get({ name: $routeParams.installation }, function (rs) {
+			if(rs.err)
+				$location.path('NoInstallation');
+			$scope.installation = $current.installation = installation.installation;
 			$scope.requestStats();
-		} else {
-			$installationService.get({ name: $routeParams.installation }, function (installation) {
-				$current.installation = installation;
-				$scope.requestStats();
-			});
-		}
+		});
 	});

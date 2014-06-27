@@ -23,6 +23,10 @@ module.exports = function (app, passport) {
 		failureFlash : true
 	}));
 
+	app.get('/:name', function (rq, rs) {
+		rs.redirect('/#/' + rq.params.name);
+	});
+
 	function Authentication(rq, rs, next) {
 		if(rq.isAuthenticated())
 			return next();
