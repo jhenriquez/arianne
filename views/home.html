@@ -39,8 +39,19 @@
 						</li>
 					</ul>
 				</div>
-				<div id="partial-view" class="col-md-9">
+				<div class="col-md-6">
 					<ng-view />
+				</div>
+				<div class="col-md-3">
+						<h4><i class="fa fa-home fa-lg">&nbsp;<%=current().name%></i></h4>
+						<ul class="list-group">
+							<li class="list-group-item">
+								<i class="fa fa-database fa-lg fa-fw">&nbsp;<%= current().dbase %></i>
+							</li>
+							<li class="list-group-item">
+								<i class="fa fa-cogs fa-lg fa-fw">&nbsp;<%= current().engine %></i>
+							</li>
+						</ul>
 				</div>
 			</div>
 		</div>
