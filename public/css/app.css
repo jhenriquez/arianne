@@ -12,3 +12,9 @@
 	-webkit-animation: bounceInLeft 0.5s;
     animation: bounceInLeft 0.10s;	
 }
+
+#search-results {
+	position: absolute;
+	width: 95%;
+	z-index: 1;
+}
