@@ -1,9 +1,8 @@
-<div>
-	<div class="text-center">
-		<i class="fa fa-cog fa-spin fa-3x" ng-show="isLoading"></i>
-	</div>
-
-	<div class="item-group">
+<div class="row">
+	<div class="col-md-12">
+		<div class="text-center">
+			<i class="fa fa-cog fa-spin fa-3x" ng-show="isLoading"></i>
+		</div>
 		<div class="alert alert-danger clearfix" ng-show="somethingWrong">
 			<span class="glyphicon glyphicon-remove-circle"></span>
 			There was an error gathering engines information.
@@ -13,6 +12,10 @@
 				</button>
 			</span>
 		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
 		<div class="alert alert-danger clearfix" ng-show="refreshError">
 			<span class="glyphicon glyphicon-remove-circle"></span>
 			Something went wrong refresing the information.
@@ -31,13 +34,19 @@
 			</button>
 			<img src="/img/ajax-loader.gif" class="pull-right" ng-show="repeatLoading" />
 		</div>
-		<div class="list-group-item"
-			ng-repeat="process in serverStats"
-			>
-			<%=process.process%>
-			<div class="pull-right badge">
-				<%=process.delta%>
-			</div>
-		</div>
+
+	</div>
+</div>
+<div class="row">
+  	<div class="col-sm-4"
+  		ng-repeat="process in serverStats"
+  		>
+    	<div class="thumbnail text-center">
+	        <i class="fa fa-cogs fa-3x"></i>
+	        <div class="caption">
+			    <h4><%=process.delta%></h4>
+			    <%=process.process%>
+		    </div>
+	    </div>
 	</div>
 </div>
