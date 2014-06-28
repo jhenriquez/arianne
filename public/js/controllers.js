@@ -60,14 +60,13 @@ angular.module('ApplicationModule')
 			$scope.requestStats();
 		};
 
-		$scope.showRefresh = function showRefresh () {
-			return $scope.serverStats != undefined;
-		};
-
 		$installationService.get({ name: $routeParams.installation }, function (rs) {
 			if(rs.err)
-				$location.path('NoInstallation');
-			$scope.installation = $current.installation = installation.installation;
+				$location.path($routeParams.installation + '/notfound');
+			$scope.installation = $current.installation = rs.installation;
 			$scope.requestStats();
 		});
+	})
+	.controller('PartialErrorController', function($scope, $routeParams) {
+		$scope.params = $routeParams;
 	});
