@@ -28,16 +28,16 @@
 					</div>
 				</div>
 			</div>
-			<div id="recent-activity" class="row">
+			<div class="row">
 				<div class="col-md-3">
-					<ul class="nav nav-pills nav-stacked" ng-show="current()">
-						<li>
-							<a href="#<%=current().name%>">Installation Information</a>
-						</li>
-						<li>
-							<a href="#">Unit Troubleshooting</a>
-						</li>
-					</ul>
+					<div class="list-group" ng-show="current()">
+						<a class="list-group-item" href="#<%=current().name%>">
+							<i class="fa fa-home fa-fw"></i>&nbsp; Installation
+						</a>
+						<a class="list-group-item" href="#">
+							<i class="fa fa-space-shuttle fa-fw"></i>&nbsp; Unit
+						</a>
+					</div>
 				</div>
 				<div class="col-md-6">
 					<ng-view />
