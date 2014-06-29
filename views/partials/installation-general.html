@@ -3,12 +3,19 @@
 		<div class="text-center">
 			<i class="fa fa-cog fa-spin fa-3x" ng-show="isLoading"></i>
 		</div>
-		<div class="alert alert-danger clearfix" ng-show="somethingWrong">
-			<span class="glyphicon glyphicon-remove-circle"></span>
-			There was an error gathering engines information.
+		<div ng-show="somethingWrong">
+			<i class="fa fa-warning fa-5x">
+				Oops!
+			</i>
+			<h4>
+				Something went wrong gathering engines health information.
+			</h4>
+			<h5>
+				This is usually due to a network issue. Please, verify the state of your vpn connection before continuing.
+			</h5>
 			<span class="pull-right">
-				<button class="btn btn-sm" ng-click="requestStats()">
-					<span class="glyphicon glyphicon-repeat"></span>
+				<button class="btn btn-md" ng-click="requestStats()">
+					Try Again!
 				</button>
 			</span>
 		</div>
