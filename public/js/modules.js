@@ -15,5 +15,17 @@ angular.module('ApplicationModule', ['ngResource', 'ngRoute'])
 			.when('/:installation/notfound', {
 				templateUrl: 'installation-notfound.html',
 				controller: 'PartialErrorController'	
+			})
+			.when('/:installation/units', {
+				templateUrl: 'unit-search.html',
+				controller: 'UnitController'
+			})
+			.when('/:installation/:imei', {
+				templateUrl: 'unit-general.html',
+				controller: 'UnitController'
+			})
+			.when('/:installation/:imei/multi', {
+				templateUrl: 'unit-multiple.html',
+				controller: 'UnitController'
 			});
 	});

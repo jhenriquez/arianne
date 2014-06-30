@@ -7,8 +7,8 @@ module.exports = function (app, passport) {
 		rs.render('login', { message : rq.flash('login_message') });
 	});
 
-	app.get('/signup', function (rq, rs) 
-{		rs.render('signup', { message : rq.flash('signup_message') });
+	app.get('/signup', function (rq, rs)  {	
+		rs.render('signup', { message : rq.flash('signup_message') });
 	});
 
 	app.post('/login', passport.authenticate('user-local-login', {

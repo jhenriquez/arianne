@@ -7,4 +7,9 @@ angular.module('ApplicationModule')
 			search: { url: '/api/installation/search/:for', method: 'get', isArray: true },
 			stats: {url: '/api/installation/stats/processing/:name', method: 'get' }
 		});
+	})
+	.factory('$unitService', function ($resource) {
+		return $resource('/api/:installation/:imei', {}, {
+			search: { method: 'get', isArray: true }
+		});
 	});

@@ -1,7 +1,7 @@
 "use strict";
 
 angular.module('ApplicationModule')
-	.controller('SearchController', function ($scope, $installationService, $current) {
+	.controller('HomeController', function ($scope, $installationService, $current) {
 
 		$scope.searchInstallations = function searchInstallations () {
 			if(!$scope.searchValue) {
@@ -67,6 +67,26 @@ angular.module('ApplicationModule')
 			$scope.requestStats();
 		});
 	})
-	.controller('PartialErrorController', function($scope, $routeParams) {
+	.controller('PartialErrorController', function ($scope, $routeParams) {
 		$scope.params = $routeParams;
+	})
+	.controller('UnitController', function ($scope, $routeParams, $current, $location, $unitService) {
+		$scope.search = function search () {
+			$unitService.search({installation: $routeParams.installation, imei: $scope.searchValue }, function (response) {
+				if(response.err) {
+					// Handle Different Scenarios
+					// Installation Not Found
+					// Unit Not Found
+					// Other Errors
+				}
+				$current.installation = response.installation;
+				if (response.items.length === 1) {
+					$current.item = response.items[0];
+					$location.path('/' + $current.installation.name + '/' + $current.item.imei);
+				} else {
+					$scope.units = response.items;
+					$location.path('/' + $current.installation.name + '/' + $current.item.imei + '/multi');
+				}
+			});
+		};
 	});

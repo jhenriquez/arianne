@@ -4,7 +4,7 @@
 		{% include "./templates/head_template.html" %}
 	</head>
 	<body>
-		<div class="container" ng-app="ApplicationModule" ng-controller="SearchController">
+		<div class="container" ng-app="ApplicationModule" ng-controller="HomeController">
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3">
 					<div id="search-box" class="form-group">
@@ -34,7 +34,7 @@
 						<a class="list-group-item" href="#<%=current().name%>">
 							<i class="fa fa-home fa-fw"></i>&nbsp; Installation
 						</a>
-						<a class="list-group-item" href="#">
+						<a class="list-group-item" href="/#/unit/search">
 							<i class="fa fa-space-shuttle fa-fw"></i>&nbsp; Unit
 						</a>
 					</div>
@@ -49,7 +49,7 @@
 								<i class="fa fa-database fa-lg fa-fw">&nbsp;<%= current().dbase %></i>
 							</li>
 							<li class="list-group-item">
-								<i class="fa fa-cogs fa-lg fa-fw">&nbsp;<%= current().engine %></i>
+								<i class="fa fa-cogs fa-lg fa-fw">&nbsp;<%= current().engine.trim() %></i>
 							</li>
 						</ul>
 				</div>
