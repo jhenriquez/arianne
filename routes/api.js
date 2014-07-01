@@ -9,18 +9,20 @@ var PROCESSES_QUERY =
     "WHERE ProcessName LIKE 'Engine%' ";
 
 var UNIT_LATEST_MESSAGES_QUERY = 
-	"SELECT I.ItemID, I.ItemName, I.[Status], H.HardwareID, H.HardwareName, H.ParserName, H.PortNumbers " +
+	"SELECT I.ItemID, I.ItemName, I.IMEI, I.[Status], H.HardwareID, H.HardwareName, H.ParserName, H.PortNumbers " +
 	"FROM dbo.Item I " +
 	"JOIN Config.Hardware H " +
 	"ON I.HardwareID = H.HardwareID " +
 	"WHERE IMEI = @IMEI;";
 
 module.exports = function (app) {
-app.get('/api/installation/search/:search', function (rq, rs) {
-Installation.find({ name: { $regex : new RegExp(rq.params.search, 'i') } },
-{}, { limit: 10 },              function (err, installations) {
-if(err) return rs.json([{ Error : err }]);                 return
-rs.json(installations);             });     });
+	app.get('/api/installation/search/:search', function (rq, rs) {
+		Installation.find({ name: { $regex : new RegExp(rq.params.search, 'i') } }, {}, { limit: 10 },
+				function (err, installations) {
+					if(err) return rs.json([{ Error : err }]); 
+					rs.json(installations);
+				});     
+	});
 
 	app.get('/api/installation/:name', function (rq, rs) {
 		Installation.findOne({ name: rq.params.name }, 
@@ -29,7 +31,7 @@ rs.json(installations);             });     });
 					return rs.json({ 
 						err: err 
 					});
-				installation ? rs.json({ installation: installation }) : rs.json({ err : { message: 'No Installation Found' } });
+				return installation ? rs.json({ installation: installation }) : rs.json({ err : { message: 'No Installation Found' } });
 			});
 	});
 
@@ -63,22 +65,22 @@ rs.json(installations);             });     });
 
 
 	app.get('/api/:installation/:imei', function (rq, rs) {
-		Installation.findOne({ name: rq.params.name }, 
+		Installation.findOne({ name: rq.params.installation }, 
 			function (err, installation) {
 				if(err) 
 					return rs.json({ err: err });
 				if(!installation) 
 					return rs.json({ err: { message: 'Installation not found.', installation: true } });
 				cnn = new sql.Connection({ user : databases.kingslanding.username, password: databases.kingslanding.password, server: installation.dbase, database: installation.name }, function (err) {
-					if (err) return rs.json({ err: err });
+					if (err) return rs.json({ err: err, installation: installation });
 				});
 
 				var statement = new sql.PreparedStatement(cnn);
 				statement.prepare(UNIT_LATEST_MESSAGES_QUERY, function (err) {
-					if (err) return rs.json({ err: err });
+					if (err) return rs.json({ err: err, installation: installation });
 					statement.execute({ IMEI: rq.params.imei }, function (err, rows) {
-						if (err) return rs.json({ err: err });
-						if(rows.length === 0) return rs.json({ err: { message: 'No information was found associated to this IMEI.', unit: true } });
+						if (err) return rs.json({ err: err, installation: installation });
+						if(rows.length === 0) return rs.json({ err: { message: 'No information was found associated to this IMEI.', unit: true }, installation: installation });
 						var response = {
 							installation: installation,
 							items: []	
@@ -88,7 +90,8 @@ rs.json(installations);             });     });
 								id: row.ItemID,
 								name: row.ItemName,
 								status: row.Status,
-								Hardware: {
+								imei: row.IMEI,
+								hardware: {
 									id: row.HardwareID,
 									name: row.HardwareName,
 									parser: row.ParserName,

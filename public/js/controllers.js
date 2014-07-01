@@ -1,7 +1,7 @@
 "use strict";
 
 angular.module('ApplicationModule')
-	.controller('HomeController', function ($scope, $installationService, $current) {
+	.controller('HomeController', function ($scope, $installationService, $current, $location) {
 
 		$scope.searchInstallations = function searchInstallations () {
 			if(!$scope.searchValue) {
@@ -25,6 +25,13 @@ angular.module('ApplicationModule')
 
 		$scope.current = function current () {
 			return $current.installation;
+		};
+
+		$scope.redirectUnit = function redirectUnit () {
+			var url = $current.installation.name + '/';
+			url += $current.item ? $current.item.imei : 'unit/search';
+			$location.path(url);
+			return url;
 		};
 	})
 	.controller('InstallationController', function ($scope, $installationService, $routeParams, $current, $location) {
@@ -70,23 +77,24 @@ angular.module('ApplicationModule')
 	.controller('PartialErrorController', function ($scope, $routeParams) {
 		$scope.params = $routeParams;
 	})
-	.controller('UnitController', function ($scope, $routeParams, $current, $location, $unitService) {
+	.controller('UnitSearchController', function ($scope, $routeParams, $current, $location, $unitService) {
 		$scope.search = function search () {
-			$unitService.search({installation: $routeParams.installation, imei: $scope.searchValue }, function (response) {
+			$location.path('/' + $current.installation.name + '/' + $current.item.imei);
+		};
+
+		$unitService.search({installation: $routeParams.installation, imei: $scope.searchValue || 'None'  },
+			function (response) {
 				if(response.err) {
-					// Handle Different Scenarios
-					// Installation Not Found
-					// Unit Not Found
+					if(response.err.installation) $location.path('/#/'+$routeParams.installation+'/notfound');
+					$current.installation = response.installation;
+					if(response.err.unit) $location.path('/#/'+$routeParams.installation+'/'+$routeParams.imei+'/notfound');
 					// Other Errors
 				}
-				$current.installation = response.installation;
 				if (response.items.length === 1) {
 					$current.item = response.items[0];
-					$location.path('/' + $current.installation.name + '/' + $current.item.imei);
 				} else {
 					$scope.units = response.items;
 					$location.path('/' + $current.installation.name + '/' + $current.item.imei + '/multi');
 				}
 			});
-		};
 	});

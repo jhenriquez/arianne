@@ -10,6 +10,6 @@ angular.module('ApplicationModule')
 	})
 	.factory('$unitService', function ($resource) {
 		return $resource('/api/:installation/:imei', {}, {
-			search: { method: 'get', isArray: true }
+			search: { method: 'get', isArray: false }
 		});
 	});
