@@ -24,10 +24,6 @@ angular.module('ApplicationModule', ['ngResource', 'ngRoute'])
 				templateUrl: 'unit-general.html',
 				controller: 'UnitController'
 			})
-			.when('/:installation/unit/search', {
-				templateUrl: 'unit-search.html',
-				controller: 'UnitSearchController'
-			})
 			.when('/:installation/:imei/multi', {
 				templateUrl: 'unit-multiple.html',
 				controller: 'UnitController'

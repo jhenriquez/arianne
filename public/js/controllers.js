@@ -77,24 +77,28 @@ angular.module('ApplicationModule')
 	.controller('PartialErrorController', function ($scope, $routeParams) {
 		$scope.params = $routeParams;
 	})
-	.controller('UnitSearchController', function ($scope, $routeParams, $current, $location, $unitService) {
-		$scope.search = function search () {
-			$location.path('/' + $current.installation.name + '/' + $current.item.imei);
-		};
+	.controller('UnitController', function ($scope, $routeParams, $current, $location, $unitService) {
 
-		$unitService.search({installation: $routeParams.installation, imei: $scope.searchValue || 'None'  },
+		$unitService.search({installation: $routeParams.installation, imei: $routeParams.imei },
 			function (response) {
 				if(response.err) {
-					if(response.err.installation) $location.path('/#/'+$routeParams.installation+'/notfound');
+					if(response.err.installation) 
+						return $location.path('/#/'+$routeParams.installation+'/notfound');
+
 					$current.installation = response.installation;
-					if(response.err.unit) $location.path('/#/'+$routeParams.installation+'/'+$routeParams.imei+'/notfound');
-					// Other Errors
+
+					if(response.err.unit)
+						return $location.path('/#/'+$routeParams.installation+'/'+$routeParams.imei+'/notfound');
 				}
+
+				if (response.name)
+					$scope.requestError = true;
+
 				if (response.items.length === 1) {
 					$current.item = response.items[0];
 				} else {
 					$scope.units = response.items;
-					$location.path('/' + $current.installation.name + '/' + $current.item.imei + '/multi');
+					$scope.isMultiple = true;
 				}
 			});
 	});
