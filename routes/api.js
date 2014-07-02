@@ -8,7 +8,7 @@ var PROCESSES_QUERY =
     "FROM [dbo].[ProcessHistory] (nolock) " +
     "WHERE ProcessName LIKE 'Engine%' ";
 
-var UNIT_LATEST_MESSAGES_QUERY = 
+var UNIT_INFORMATION_QUERY = 
 	"SELECT I.ItemID, I.ItemName, I.IMEI, I.[Status], H.HardwareID, H.HardwareName, H.ParserName, H.PortNumbers " +
 	"FROM dbo.Item I " +
 	"JOIN Config.Hardware H " +
@@ -67,38 +67,50 @@ module.exports = function (app) {
 	app.get('/api/:installation/:imei', function (rq, rs) {
 		Installation.findOne({ name: rq.params.installation }, 
 			function (err, installation) {
-				if(err) 
-					return rs.json({ err: err });
-				if(!installation) 
-					return rs.json({ err: { message: 'Installation not found.', installation: true } });
+				if(err)
+					response.err = err;
+
+				if(!installation)
+					response.err = { err: { message: 'Installation not found.', installation: true } };
+
+				response.installation = installation;
+
 				cnn = new sql.Connection({ user : databases.kingslanding.username, password: databases.kingslanding.password, server: installation.dbase, database: installation.name }, function (err) {
-					if (err) return rs.json({ err: err, installation: installation });
+					if (err)
+						response.err = err;
 				});
 
 				var statement = new sql.PreparedStatement(cnn);
-				statement.prepare(UNIT_LATEST_MESSAGES_QUERY, function (err) {
-					if (err) return rs.json({ err: err, installation: installation });
+
+				statement.prepare(UNIT_INFORMATION_QUERY, function (err) {
+
+					if (err)
+						response.err = err;
+
 					statement.execute({ IMEI: rq.params.imei }, function (err, rows) {
-						if (err) return rs.json({ err: err, installation: installation });
-						if(rows.length === 0) return rs.json({ err: { message: 'No information was found associated to this IMEI.', unit: true }, installation: installation });
-						var response = {
-							installation: installation,
-							items: []	
-						};
-						rows.forEach(function (row) {
-							response.items.push({
-								id: row.ItemID,
-								name: row.ItemName,
-								status: row.Status,
-								imei: row.IMEI,
-								hardware: {
-									id: row.HardwareID,
-									name: row.HardwareName,
-									parser: row.ParserName,
-									ports: row.PortNumbers
-								}
+
+						if (err)
+							response.err = err;
+
+						if(rows.length === 0) 
+							response.err = { err: { message: 'No information was found associated to this IMEI.', unit: true } };
+
+						if(!response.err)
+							rows.forEach(function (row) {
+								response.items.push({
+									id: row.ItemID,
+									name: row.ItemName,
+									status: row.Status,
+									imei: row.IMEI,
+									hardware: {
+										id: row.HardwareID,
+										name: row.HardwareName,
+										parser: row.ParserName,
+										ports: row.PortNumbers
+									}
+								});
 							});
-						});
+
 						rs.json(response);
 					});
 				});
