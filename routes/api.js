@@ -67,11 +67,15 @@ module.exports = function (app) {
 	app.get('/api/:installation/:imei', function (rq, rs) {
 		Installation.findOne({ name: rq.params.installation }, 
 			function (err, installation) {
+				var response = {};
 				if(err)
 					response.err = err;
 
 				if(!installation)
-					response.err = { err: { message: 'Installation not found.', installation: true } };
+					response.err = { message: 'Installation not found.', installation: true };
+
+				if(response.err)
+					return rs.json(response);
 
 				response.installation = installation;
 
@@ -82,20 +86,27 @@ module.exports = function (app) {
 
 				var statement = new sql.PreparedStatement(cnn);
 
+				statement.input('IMEI', sql.NVarChar);
+
 				statement.prepare(UNIT_INFORMATION_QUERY, function (err) {
 
-					if (err)
+					if (err) {
 						response.err = err;
+						return rs.json(response);
+					}
 
 					statement.execute({ IMEI: rq.params.imei }, function (err, rows) {
 
-						if (err)
+						if (err) {
 							response.err = err;
+							return rs.json(response);
+						}
 
 						if(rows.length === 0) 
-							response.err = { err: { message: 'No information was found associated to this IMEI.', unit: true } };
+							response.err = { message: 'No information was found associated to this IMEI.', unit: true };
+							
+							response.items = [];
 
-						if(!response.err)
 							rows.forEach(function (row) {
 								response.items.push({
 									id: row.ItemID,

@@ -9,5 +9,45 @@
 		...
 	</h5>
 </div>
-<div ng-show="isMultiple">
+<div ng-show="isMultiple && !requestError">
+	<div>
+		<i class="fa fa-info-circle fa-2x">
+			Multiple Units Have Used This IMEI
+		</i>
+	</div>
+	<br />
+	<div class="list-group">
+		<a 
+			class="list-group-item"
+			ng-repeat="item in items"
+			href="#/<%=installation.name%>/<%=item.imei%>/<%=item.id%>"
+			>
+			<strong><%=item.name%></strong> (<%=item.id%>)<br />
+			Status: <%=item.status%>
+		</a>
+	</div>
+</div>
+<div ng-hide="isMultiple || requestError">
+	<section>
+		<h3 class="header">Device Information</h3>
+		<div class="row">
+			<div class="col-md-12">
+				<%=item.name%><br />
+				<%=item.id%><br />
+				<%=item.status%><br />
+				<%=item.imei%><br />
+			</div>
+		</div>
+	</section>
+	<section>
+		<h3 class="header">Hardware Profile</h3>
+		<div class="row">
+			<div class="col-md-12">
+				<%=item.hardware.name%><br />
+				<%=item.hardware.id%><br />
+				<%=item.hardware.parser%><br />
+				<%=item.hardware.ports%><br />
+			</div>
+		</div>
+	</section>
 </div>

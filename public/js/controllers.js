@@ -29,7 +29,7 @@ angular.module('ApplicationModule')
 
 		$scope.redirectUnit = function redirectUnit () {
 			var url = $current.installation.name + '/';
-			url += $current.item ? $current.item.imei : 'unit/search';
+			url += $current.imei ? $current.imei : 'unit/search';
 			$location.path(url);
 			return url;
 		};
@@ -82,23 +82,35 @@ angular.module('ApplicationModule')
 		$unitService.search({installation: $routeParams.installation, imei: $routeParams.imei },
 			function (response) {
 				if(response.err) {
+
 					if(response.err.installation) 
-						return $location.path('/#/'+$routeParams.installation+'/notfound');
+						return $location.path($routeParams.installation+'/notfound');
 
 					$current.installation = response.installation;
 
 					if(response.err.unit)
-						return $location.path('/#/'+$routeParams.installation+'/'+$routeParams.imei+'/notfound');
+						return $location.path($routeParams.installation+'/'+$routeParams.imei+'/notfound');
+
+					return $scope.requestError = true;
 				}
 
-				if (response.name)
-					$scope.requestError = true;
+				$current.installation = $scope.installation = response.installation;
+				$current.imei = $routeParams.imei;
 
 				if (response.items.length === 1) {
-					$current.item = response.items[0];
+					$scope.item = response.items[0];
 				} else {
-					$scope.units = response.items;
+					$scope.items = response.items;
 					$scope.isMultiple = true;
 				}
-			});
+
+				if ($routeParams.item) {
+					$scope.items.forEach(function (i) {
+						if(i.id == $routeParams.item) {
+							$scope.isMultiple = false;
+							$scope.item = i;
+						}
+					});
+				}
+		});
 	});
