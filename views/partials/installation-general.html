@@ -1,8 +1,8 @@
+<div class="text-center">
+	<i class="fa fa-cog fa-spin fa-3x" ng-show="isLoading"></i>
+</div>
 <div class="row">
 	<div class="col-md-12">
-		<div class="text-center">
-			<i class="fa fa-cog fa-spin fa-3x" ng-show="isLoading"></i>
-		</div>
 		<div ng-show="somethingWrong">
 			<i class="fa fa-warning fa-5x">
 				Oops!
@@ -25,12 +25,11 @@
 	<div class="col-md-12">
 		<div class="alert alert-danger clearfix" ng-show="refreshError">
 			<span class="glyphicon glyphicon-remove-circle"></span>
-			Something went wrong refresing the information.
-			<
+			Something went wrong refresing the information. Please try again.
 		</div>
 	</div>
 </div>
-<section>
+<section ng-hide="somethingWrong || isLoading">
 	<h3 class="page-header">Engines</h3>
 	<div class="row">
 		<div class="col-md-2 col-md-offset-10" ng-click="refreshProcessing()">

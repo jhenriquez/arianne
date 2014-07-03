@@ -63,7 +63,6 @@ module.exports = function (app) {
 			});
 	});
 
-
 	app.get('/api/:installation/:imei', function (rq, rs) {
 		Installation.findOne({ name: rq.params.installation }, 
 			function (err, installation) {
