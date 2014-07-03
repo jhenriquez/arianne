@@ -1,6 +1,7 @@
 <div class="row">
-	<div class="col-md-8 col-md-offset-2">
+	<div class="col-md-10 col-md-offset-1">
 		<form ng-submit="search()">
+			<div class="input-group">
 			<input
 				type="text"
 				placeholder="Search Units"
@@ -8,6 +9,10 @@
 				ng-model="imei"
 				ng-submit="search()"
 				/>
+			<span class="input-group-btn">
+				<button class="btn btn-md" ng-disabled="!imei">Search</button>
+			</span>
+			</div>
 		</form>
 	</div>
 </div>

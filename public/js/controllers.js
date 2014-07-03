@@ -84,7 +84,8 @@ angular.module('ApplicationModule')
 	.controller('UnitController', function ($scope, $routeParams, $current, $location, $unitService) {
 
 		$scope.search = function search () {
-			$location.path($routeParams.installation + '/' + $scope.imei);
+			if($scope.imei)
+				$location.path($routeParams.installation + '/' + $scope.imei);
 		}
 
 		$scope.requestUnitInformation = function requestUnitInformation () {
