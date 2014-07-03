@@ -5,11 +5,11 @@ angular.module('ApplicationModule')
 		return $resource('/api/installation/:name', {},{
 			get: { url: '/api/installation/:name', method: 'get', isArray: false },
 			search: { url: '/api/installation/search/:for', method: 'get', isArray: true },
-			stats: {url: '/api/installation/stats/processing/:name', method: 'get' }
+			stats: {url: '/api/:installation/:server/processing', method: 'get' }
 		});
 	})
 	.factory('$unitService', function ($resource) {
-		return $resource('/api/:installation/:imei', {}, {
+		return $resource('/api/:installation/:server/:imei', {}, {
 			search: { method: 'get', isArray: false }
 		});
 	});

@@ -19,7 +19,7 @@ module.exports = function (app) {
 	app.get('/api/installation/search/:search', function (rq, rs) {
 		Installation.find({ name: { $regex : new RegExp(rq.params.search, 'i') } }, {}, { limit: 10 },
 				function (err, installations) {
-					if(err) return rs.json([{ Error : err }]); 
+					if(err) return rs.json([{ err : err }]); 
 					rs.json(installations);
 				});     
 	});
@@ -31,100 +31,104 @@ module.exports = function (app) {
 					return rs.json({ 
 						err: err 
 					});
-				return installation ? rs.json({ installation: installation }) : rs.json({ err : { message: 'No Installation Found' } });
+				return installation ? rs.json({ installation: installation }) : rs.json({ err : { message: 'No Installation Found', notfound: true } });
 			});
 	});
 
-	app.get('/api/installation/stats/processing/:name', function (rq, rs) {
-		Installation.findOne({ name: rq.params.name }, 
-			function (err, installation) {
-				if(err) return console.log(err);
-				cnn = new sql.Connection({ user : databases.kingslanding.username, password: databases.kingslanding.password, server: installation.dbase, database: installation.name }, function (err) {
-					if (err) return rs.json(err);
+	app.get('/api/:installation/:server/processing', function (rq, rs) {
+		var cfg = { 
+				user : databases.kingslanding.username,
+				password: databases.kingslanding.password,
+				server: rq.params.server,
+				database: rq.params.installation
+			},
+			response = { processing: [] };
 
-                    var server = { processing : []};
+		cnn = new sql.Connection(, function (err) {
+			if (err) {
+				response.err = err;
+				return rs.json(response);
+			}
 
-					cnn.request().query(PROCESSES_QUERY, function (err, rows) {
-                        if(err) return rs.json(err);
-
-                        rows.forEach(function (row) {
-                            server.processing.push({
-                                process: row.ProcessName,
-                                currentID: row.LastID,
-                                lastActivity: row.LastActivityDate,
-                                delta: row.Delta
-                            });
-                        });
-
-                        return rs.json(server);
-                    });
-
-				});
-			});
-	});
-
-	app.get('/api/:installation/:imei', function (rq, rs) {
-		Installation.findOne({ name: rq.params.installation }, 
-			function (err, installation) {
-				var response = {};
-				if(err)
-					response.err = err;
-
-				if(!installation)
-					response.err = { message: 'Installation not found.', installation: true };
-
-				if(response.err)
+			cnn.request().query(PROCESSES_QUERY, function (err, rows) {
+                if(err) {
+                	response.err = err;
 					return rs.json(response);
+                }
 
-				response.installation = installation;
-
-				cnn = new sql.Connection({ user : databases.kingslanding.username, password: databases.kingslanding.password, server: installation.dbase, database: installation.name }, function (err) {
-					if (err)
-						response.err = err;
-				});
-
-				var statement = new sql.PreparedStatement(cnn);
-
-				statement.input('IMEI', sql.NVarChar);
-
-				statement.prepare(UNIT_INFORMATION_QUERY, function (err) {
-
-					if (err) {
-						response.err = err;
-						return rs.json(response);
-					}
-
-					statement.execute({ IMEI: rq.params.imei }, function (err, rows) {
-
-						if (err) {
-							response.err = err;
-							return rs.json(response);
-						}
-
-						if(rows.length === 0) 
-							response.err = { message: 'No information was found associated to this IMEI.', unit: true };
-							
-							response.items = [];
-
-							rows.forEach(function (row) {
-								response.items.push({
-									id: row.ItemID,
-									name: row.ItemName,
-									status: row.Status,
-									imei: row.IMEI,
-									hardware: {
-										id: row.HardwareID,
-										name: row.HardwareName,
-										parser: row.ParserName,
-										ports: row.PortNumbers
-									}
-								});
-							});
-
-						rs.json(response);
+                rows.forEach(function (row) {
+                	response.processing.push({
+					process: row.ProcessName,
+					currentID: row.LastID,
+					lastActivity: row.LastActivityDate,
+					delta: row.Delta
 					});
 				});
+
+			return rs.json(response);
+		});
+	});
+
+	app.get('/api/:installation/:server/:imei', function (rq, rs) {
+		var cfg = { 
+				user : databases.kingslanding.username,
+				password: databases.kingslanding.password, 
+				server: rq.params.server, 
+				database: rq.params.installation 
+			},
+			response = {};
+
+		console.log(cfg);
+
+		cnn = new sql.Connection(cfg, function (err) {
+			if (err) {
+				response.err = err;
+				return rs.json(response);
+			}
+		});
+
+		var statement = new sql.PreparedStatement(cnn);
+
+		statement.input('IMEI', sql.NVarChar);
+		statement.prepare(UNIT_INFORMATION_QUERY, function (err) {
+
+			if (err) {
+				response.err = err;
+				return rs.json(response);
+			}
+
+			statement.execute({ IMEI: rq.params.imei }, function (err, rows) {
+
+				if (err) {
+					response.err = err;
+					return rs.json(response);
+				}
+
+				if(rows.length === 0) {
+					response.err = { message: 'No information was found associated to this IMEI.', notfound: true };
+					return rs.json(response);	
+				}
+							
+				response.items = [];
+
+				rows.forEach(function (row) {
+					response.items.push({
+						id: row.ItemID,
+						name: row.ItemName,
+						status: row.Status,
+						imei: row.IMEI,
+						hardware: {
+							id: row.HardwareID,
+							name: row.HardwareName,
+							parser: row.ParserName,
+							ports: row.PortNumbers
+							}
+						});
+					});
+
+				rs.json(response);
 			});
+		});
 	});
 
 	app.get('/api/raw/:imei', function (rq, rs) {

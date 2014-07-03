@@ -43,7 +43,7 @@ angular.module('ApplicationModule')
 				$scope.somethingWrong = false;
 			}
 
-			$installationService.stats({ name: $current.installation.name }, function (server) {
+			$installationService.stats({ installation: $current.installation.name, server: $current.installation.dbase }, function (server) {
 				if($scope.repeatLoading === undefined) {
 					$scope.isLoading = false;
 				} else {
@@ -81,7 +81,7 @@ angular.module('ApplicationModule')
 	.controller('PartialErrorController', function ($scope, $routeParams) {
 		$scope.params = $routeParams;
 	})
-	.controller('UnitController', function ($scope, $routeParams, $current, $location, $unitService) {
+	.controller('UnitController', function ($scope, $routeParams, $current, $location, $unitService, $installationService) {
 
 		$scope.search = function search () {
 			if($scope.imei)
@@ -90,23 +90,16 @@ angular.module('ApplicationModule')
 
 		$scope.requestUnitInformation = function requestUnitInformation () {
 			$scope.requestLoading = true;
-			$unitService.search({installation: $routeParams.installation, imei: $routeParams.imei },
+			$unitService.search({installation: $routeParams.installation, imei: $routeParams.imei, server: $current.installation.dbase },
 				function (response) {
 					$scope.requestLoading = false;
 					if(response.err) {
-
-						if(response.err.installation) 
-							return $location.path($routeParams.installation+'/notfound');
-
-						$current.installation = response.installation;
-
-						if(response.err.unit)
+						if(response.err.notfound)
 							return $location.path($routeParams.installation+'/'+$routeParams.imei+'/notfound');
 
 						return $scope.requestError = true;
 					}
 
-					$current.installation = $scope.installation = response.installation;
 					$current.imei = $routeParams.imei;
 
 					if (response.items.length === 1) {
@@ -127,6 +120,14 @@ angular.module('ApplicationModule')
 			});
 		}
 
-		if($routeParams.imei)
+		$installationService.get({ name: $routeParams.installation }, function (rs) {
+			if(rs.err) {
+				if(rs.err.notfound)
+					$location.path($routeParams.installation + '/notfound');
+			}
+			if ($current.installation != undefined && $current.installation.name != rs.installation.name)
+				$current.imei = undefined;
+			$scope.installation = $current.installation = rs.installation;
 			$scope.requestUnitInformation();
+		});
 	});
