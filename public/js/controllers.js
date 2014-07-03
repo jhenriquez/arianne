@@ -91,6 +91,7 @@ angular.module('ApplicationModule')
 			$scope.requestLoading = true;
 			$unitService.search({installation: $routeParams.installation, imei: $routeParams.imei },
 				function (response) {
+					$scope.requestLoading = false;
 					if(response.err) {
 
 						if(response.err.installation) 
@@ -122,7 +123,6 @@ angular.module('ApplicationModule')
 							}
 						});
 					}
-					$scope.requestLoading = false;
 			});
 		}
 
