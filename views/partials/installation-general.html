@@ -44,16 +44,19 @@
 
 	</div>
 </div>
-<div class="row">
-  	<div class="col-sm-4"
-  		ng-repeat="process in serverStats"
-  		>
-    	<div class="thumbnail text-center">
-	        <i class="fa fa-cogs fa-3x"></i>
-	        <div class="caption">
-			    <h4><%=process.delta%></h4>
-			    <%=process.process%>
+<section>
+	<h3 class="page-header">Engines</h3>
+	<div class="row">
+	  	<div class="col-sm-4"
+	  		ng-repeat="process in serverStats"
+	  		>
+	    	<div class="thumbnail text-center">
+		        <i class="fa fa-cogs fa-3x"></i>
+		        <div class="caption">
+				    <h4><%=process.delta%></h4>
+				    <%=process.process.replace('Engine.','')%>
+			    </div>
 		    </div>
-	    </div>
+		</div>
 	</div>
-</div>
+</section>
