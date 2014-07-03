@@ -1,13 +1,24 @@
-<div ng-show="requestError">
+<div>
+	<div class="text-center">
+		<i class="fa fa-cog fa-spin fa-3x" ng-show="isLoading"></i>
+	</div>
+	<h5>Requesting Device Info...</h5>
+</div>
+<div ng-show="requestError" ng-hide="requestLoading">
 	<i class="fa fa-warning fa-5x">
 		Oops!
 	</i>
 	<h4>
-		Something went wrong retrieving the device information.
+		Something went wrong retrieving the device info.
 	</h4>
 	<h5>
-		...
+		Please, review your internet/vpn connections.
 	</h5>
+	<span class="pull-right">
+		<button class="btn btn-md" ng-click="requestUnitInformation()">
+			Try Again!
+		</button>
+	</span>
 </div>
 <div ng-show="isMultiple && !requestError">
 	<div>
@@ -27,7 +38,7 @@
 		</a>
 	</div>
 </div>
-<div ng-hide="isMultiple || requestError">
+<div ng-hide="isMultiple || requestError || requestLoading">
 	<section>
 		<h3 class="header">Device Information</h3>
 		<div class="row">

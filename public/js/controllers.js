@@ -20,6 +20,8 @@ angular.module('ApplicationModule')
 		$scope.selectCustomer = function selectCustomer (installation) {
 			$scope.installations = [];
 			$scope.searchValue = '';
+			if ($current.installation != undefined && $current.installation.name != rs.installation.name)
+				$current.imei = undefined;
 			$current.installation = installation;
 		};
 
@@ -29,7 +31,7 @@ angular.module('ApplicationModule')
 
 		$scope.redirectUnit = function redirectUnit () {
 			var url = $current.installation.name + '/';
-			url += $current.imei ? $current.imei : 'unit/search';
+			url += $current.imei ? $current.imei : 'units';
 			$location.path(url);
 			return url;
 		};
@@ -70,6 +72,8 @@ angular.module('ApplicationModule')
 		$installationService.get({ name: $routeParams.installation }, function (rs) {
 			if(rs.err)
 				$location.path($routeParams.installation + '/notfound');
+			if ($current.installation != undefined && $current.installation.name != rs.installation.name)
+				$current.imei = undefined;
 			$scope.installation = $current.installation = rs.installation;
 			$scope.requestStats();
 		});
@@ -79,38 +83,49 @@ angular.module('ApplicationModule')
 	})
 	.controller('UnitController', function ($scope, $routeParams, $current, $location, $unitService) {
 
-		$unitService.search({installation: $routeParams.installation, imei: $routeParams.imei },
-			function (response) {
-				if(response.err) {
+		$scope.search = function search () {
+			$location.path($routeParams.installation + '/' + $scope.imei);
+		}
 
-					if(response.err.installation) 
-						return $location.path($routeParams.installation+'/notfound');
+		$scope.requestUnitInformation = function requestUnitInformation () {
+			$scope.requestLoading = true;
+			$unitService.search({installation: $routeParams.installation, imei: $routeParams.imei },
+				function (response) {
+					if(response.err) {
 
-					$current.installation = response.installation;
+						if(response.err.installation) 
+							return $location.path($routeParams.installation+'/notfound');
 
-					if(response.err.unit)
-						return $location.path($routeParams.installation+'/'+$routeParams.imei+'/notfound');
+						$current.installation = response.installation;
 
-					return $scope.requestError = true;
-				}
+						if(response.err.unit)
+							return $location.path($routeParams.installation+'/'+$routeParams.imei+'/notfound');
 
-				$current.installation = $scope.installation = response.installation;
-				$current.imei = $routeParams.imei;
+						return $scope.requestError = true;
+					}
 
-				if (response.items.length === 1) {
-					$scope.item = response.items[0];
-				} else {
-					$scope.items = response.items;
-					$scope.isMultiple = true;
-				}
+					$current.installation = $scope.installation = response.installation;
+					$current.imei = $routeParams.imei;
 
-				if ($routeParams.item) {
-					$scope.items.forEach(function (i) {
-						if(i.id == $routeParams.item) {
-							$scope.isMultiple = false;
-							$scope.item = i;
-						}
-					});
-				}
-		});
+					if (response.items.length === 1) {
+						$scope.item = response.items[0];
+					} else {
+						$scope.items = response.items;
+						$scope.isMultiple = true;
+					}
+
+					if ($routeParams.item) {
+						$scope.items.forEach(function (i) {
+							if(i.id == $routeParams.item) {
+								$scope.isMultiple = false;
+								$scope.item = i;
+							}
+						});
+					}
+					$scope.requestLoading = false;
+			});
+		}
+
+		if($routeParams.imei)
+			$scope.requestUnitInformation();
 	});
