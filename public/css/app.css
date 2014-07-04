@@ -13,7 +13,7 @@
     animation: bounceInLeft 0.10s;	
 }
 
-#search-results {
+.hover-drop {
 	position: absolute;
 	width: 95%;
 	z-index: 1;
