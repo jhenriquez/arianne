@@ -9,12 +9,12 @@ var config = {
 	server: db.kingslanding.server
 };
 
+mongoose.connect(db.oberyn);
+
 var cn = new sql.Connection(config, function (err) {
 	if (err) throw err;	
 
-	mongoose.connect(db.oberyn);
-
-	cn.request().query("SELECT * FROM [PositionLogic].[dbo].[Site] WHERE [Status] = 'A'", function (err, rows) {
+	cn.request().query("SELECT * FROM [PositionLogic].[dbo].[Site] WITH(nolock) WHERE [Status] = 'A'", function (err, rows) {
 		if(err) throw err;
 		var total = 0;
 
