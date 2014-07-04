@@ -38,23 +38,15 @@
 			<div class="row">
 				<div class="col-md-3">
 					<div class="list-group">
-						<a 
-							class="list-group-item"
-							href="#<%=current().name%>" 
-							ng-show="current()" 
-							data-toggle="tooltip" data-placement="right" title="Display Installation Information">
+						<div ng-class="isNavigationEnabled()" ng-click="redirectInstallation()">
 							<i class="fa fa-home fa-fw"></i>&nbsp; Installation
-						</a>
-						<a
-							class="list-group-item"
-							ng-click="redirectUnit()" 
-							ng-show="current()"
-							data-toggle="tooltip" data-placement="right" title="Display Unit Information">
+						</div>
+						<div ng-class="isNavigationEnabled()" ng-click="redirectUnit()"> 
 							<i class="fa fa-space-shuttle fa-fw"></i>&nbsp; Unit
-						</a>
-						<a class="list-group-item" href="" ng-click="redirectMaintenance()">
+						</div>
+						<div class="list-group-item btn-essense" ng-click="redirectMaintenance()">
 							<i class="fa fa-bug fa-fw"></i>&nbsp; Maintenance
-						</a>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-6">

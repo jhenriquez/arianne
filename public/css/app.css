@@ -23,3 +23,13 @@
   width: 100%;
   margin-bottom: 5px;
 }
+
+.btn-essense:hover {
+  cursor: pointer;
+  background-color: lightgray;
+}
+
+.btn-essense.disabled {
+  pointer-events: none;
+  color: gray;
+}

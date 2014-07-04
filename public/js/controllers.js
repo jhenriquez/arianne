@@ -36,11 +36,19 @@ angular.module('ApplicationModule')
 			return url;
 		};
 
-		$scope.redirectMaintenance = function () {
-			$current.installation = undefined;
-			$current.imei = undefined;
+		$scope.redirectMaintenance = function redirectMaintenance () {
 			$location.path('/servers');
-		}
+		};
+
+		$scope.redirectInstallation = function redirectInstallation () {
+			$location.path('/'+$current.installation.name);
+		};
+
+		$scope.isNavigationEnabled = function isNavigationEnabled () {
+			var clazz = 'list-group-item btn-essense ';
+			clazz += $current.installation ? '' : 'disabled';
+			return clazz.trim();
+		};
 	})
 	.controller('InstallationController', function ($scope, $installationService, $routeParams, $current, $location) {
 		$scope.requestStats = function requestStats () {
