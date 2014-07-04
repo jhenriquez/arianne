@@ -43,24 +43,25 @@ angular.module('ApplicationModule')
 				$scope.somethingWrong = false;
 			}
 
-			$installationService.stats({ installation: $current.installation.name, server: $current.installation.dbase }, function (server) {
-				if($scope.repeatLoading === undefined) {
-					$scope.isLoading = false;
-				} else {
-					$scope.repeatLoading = false;
-				}
+			$installationService.stats({ installation: $current.installation.name, server: $current.installation.dbase },
+					function (response) {
+						if($scope.repeatLoading === undefined) {
+							$scope.isLoading = false;
+						} else {
+							$scope.repeatLoading = false;
+						}
 
-				if(server.name) {
-					if($scope.refreshError === undefined) {
-						return $scope.somethingWrong = true;
-					} else {
-						return $scope.refreshError = true;
-					}
-				}
+						if(response.err) {
+							if($scope.refreshError === undefined) {
+								return $scope.somethingWrong = true;
+							} else {
+								return $scope.refreshError = true;
+							}
+						}
 
-				$scope.somethingWrong = false;
-				$scope.serverStats = server.processing;
-			});
+						$scope.somethingWrong = false;
+						$scope.serverStats = response.processing;
+					});
 		};
 
 		$scope.refreshProcessing = function refreshProcessing () {

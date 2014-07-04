@@ -44,7 +44,7 @@ module.exports = function (app) {
 			},
 			response = { processing: [] };
 
-		cnn = new sql.Connection(, function (err) {
+		cnn = new sql.Connection(cfg, function (err) {
 			if (err) {
 				response.err = err;
 				return rs.json(response);
@@ -66,6 +66,7 @@ module.exports = function (app) {
 				});
 
 			return rs.json(response);
+			});
 		});
 	});
 
@@ -78,19 +79,16 @@ module.exports = function (app) {
 			},
 			response = {};
 
-		console.log(cfg);
-
 		cnn = new sql.Connection(cfg, function (err) {
 			if (err) {
 				response.err = err;
 				return rs.json(response);
 			}
-		});
 
-		var statement = new sql.PreparedStatement(cnn);
+			var statement = new sql.PreparedStatement(cnn);
 
-		statement.input('IMEI', sql.NVarChar);
-		statement.prepare(UNIT_INFORMATION_QUERY, function (err) {
+			statement.input('IMEI', sql.NVarChar);
+			statement.prepare(UNIT_INFORMATION_QUERY, function (err) {
 
 			if (err) {
 				response.err = err;
@@ -129,11 +127,6 @@ module.exports = function (app) {
 				rs.json(response);
 			});
 		});
-	});
-
-	app.get('/api/raw/:imei', function (rq, rs) {
-	});
-
-	app.get('/api/commands/:imei', function (rq, rs) {
+		});
 	});
 };
