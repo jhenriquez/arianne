@@ -37,14 +37,22 @@
 			</div>
 			<div class="row">
 				<div class="col-md-3">
-					<div class="list-group" ng-show="current()">
-						<a class="list-group-item" href="#<%=current().name%>">
+					<div class="list-group">
+						<a 
+							class="list-group-item"
+							href="#<%=current().name%>" 
+							ng-show="current()" 
+							data-toggle="tooltip" data-placement="right" title="Display Installation Information">
 							<i class="fa fa-home fa-fw"></i>&nbsp; Installation
 						</a>
-						<a class="list-group-item" href="" ng-click="redirectUnit()">
+						<a
+							class="list-group-item"
+							ng-click="redirectUnit()" 
+							ng-show="current()"
+							data-toggle="tooltip" data-placement="right" title="Display Unit Information">
 							<i class="fa fa-space-shuttle fa-fw"></i>&nbsp; Unit
 						</a>
-						<a class="list-group-item" href="" ng-click="redirectUnit()">
+						<a class="list-group-item" href="" ng-click="redirectMaintenance()">
 							<i class="fa fa-bug fa-fw"></i>&nbsp; Maintenance
 						</a>
 					</div>

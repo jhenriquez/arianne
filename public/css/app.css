@@ -19,11 +19,7 @@
 	z-index: 1;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
+.inline-button {
   width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 110px;
-  background-color: #f5f5f5;
+  margin-bottom: 5px;
 }

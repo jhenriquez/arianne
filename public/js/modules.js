@@ -8,6 +8,10 @@ angular.module('ApplicationModule', ['ngResource', 'ngRoute'])
 
 		// configure routes
 		$routeProvider
+			.when('/servers', {
+				templateUrl: 'maintenance-general.html',
+				controller: 'MaintenanceController'
+			})
 			.when('/:installation', {
 				templateUrl: 'installation-general.html',
 				controller: 'InstallationController'

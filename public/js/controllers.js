@@ -35,6 +35,12 @@ angular.module('ApplicationModule')
 			$location.path(url);
 			return url;
 		};
+
+		$scope.redirectMaintenance = function () {
+			$current.installation = undefined;
+			$current.imei = undefined;
+			$location.path('/servers');
+		}
 	})
 	.controller('InstallationController', function ($scope, $installationService, $routeParams, $current, $location) {
 		$scope.requestStats = function requestStats () {
@@ -131,4 +137,6 @@ angular.module('ApplicationModule')
 			$scope.installation = $current.installation = rs.installation;
 			$scope.requestUnitInformation();
 		});
+	})
+	.controller('MaintenanceController', function ($scope) {
 	});
