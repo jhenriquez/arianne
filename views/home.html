@@ -5,6 +5,24 @@
 	</head>
 	<body>
 		<div class="container" ng-app="ApplicationModule" ng-controller="HomeController">
+			<div class="row">
+				<div class="col-md-2 col-md-offset-10 login-area">
+					<div class="dropdown">
+						<a class="anchor-linkless-pointer" data-toggle="dropdown">{{user.username}}
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li role="presentation">
+								<a href="#">User Profile</a>
+							</li>
+							<li class="separator"></li>
+							<li role="presentation">
+								<a href="/logout">logout</a>
+							</li>
+					 	</ul>
+					</div>
+				</div>
+			</div>
 			<div class="page-header">
 				<h2>Arianne <small>Unbowed, Unbent, Unbroken</small></h2>
 			</div>

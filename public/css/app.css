@@ -33,3 +33,12 @@
   pointer-events: none;
   color: gray;
 }
+
+.login-area {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.anchor-linkless-pointer {
+  cursor: pointer;  
+}
