@@ -1,5 +1,5 @@
 module.exports = function (app, passport) {
-	app.get('/', function (rq, rs) {
+	app.get('/', Authentication, function (rq, rs) {
 		rs.render('home', { user: rq.user });
 	});
 
@@ -9,6 +9,11 @@ module.exports = function (app, passport) {
 
 	app.get('/signup', function (rq, rs)  {	
 		rs.render('signup', { message : rq.flash('signup_message') });
+	});
+
+	app.get('/logout', function (rq, rs) {
+		rq.logOut();
+		rs.redirect('/');
 	});
 
 	app.post('/login', passport.authenticate('user-local-login', {
@@ -23,7 +28,7 @@ module.exports = function (app, passport) {
 		failureFlash : true
 	}));
 
-	app.get('/:name', function (rq, rs) {
+	app.get('/:name', Authentication, function (rq, rs) {
 		rs.redirect('/#/' + rq.params.name);
 	});
 
