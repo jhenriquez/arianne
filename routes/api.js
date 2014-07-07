@@ -9,7 +9,8 @@ var PROCESSES_QUERY =
     "WHERE ProcessName LIKE 'Engine%' ";
 
 var UNIT_INFORMATION_QUERY = 
-	"SELECT I.ItemID, I.ItemName, I.IMEI, I.[Status], H.HardwareID, H.HardwareName, H.ParserName, H.PortNumbers " +
+	"SELECT I.ItemID, I.ItemName, I.IMEI, I.[Status], H.HardwareID, H.HardwareName, H.ParserName, H.PortNumbers, " +
+	"H.IgnitionSensor, H.BatterySensor, H.VibrationSensor, H.ReedSensor, H.SpeedSensor, H.TemperatureSensor, H.UseDeviceOdometer, H.UseDeviceEngineHour, H.FuelSensor, H.Temperature2Sensor " +
 	"FROM dbo.Item I " +
 	"JOIN Config.Hardware H " +
 	"ON I.HardwareID = H.HardwareID " +
@@ -119,10 +120,26 @@ module.exports = function (app) {
 							id: row.HardwareID,
 							name: row.HardwareName,
 							parser: row.ParserName,
-							ports: row.PortNumbers
+							ports: row.PortNumbers,
+							deviceOdometer: row.UseDeviceOdometer,
+							deviceEngineHours: row.UseDeviceEngineHour
+							},
+						sensors: {
+							ignition: row.IgnitionSensor,
+							battery: row.BatterySensor,
+							vibration: row.VibrationSensor,
+							reed: row.ReedSensor,
+							speed: row.SpeedSensor,
+							temperature: {
+								one: row.TemperatureSensor,
+								two: row.Temperature2Sensor
+								},
+							fuel: row.FuelSensor
 							}
 						});
 					});
+
+				console.log(response.items[0]);
 
 				rs.json(response);
 			});
