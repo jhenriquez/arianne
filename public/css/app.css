@@ -16,7 +16,7 @@
 .hover-drop {
 	position: absolute;
 	width: 95%;
-	z-index: 1;
+	z-index: 3;
 }
 
 .inline-button {
