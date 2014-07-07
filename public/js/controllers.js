@@ -132,6 +132,9 @@ angular.module('ApplicationModule')
 							}
 						});
 					}
+
+					$scope.requestLoading = false;
+					$scope.requestError = false;
 			});
 		}
 

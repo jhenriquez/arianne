@@ -4,7 +4,7 @@
 	</div>
 	<h5>Requesting Device Info...</h5>
 </div>
-<div ng-show="requestError" ng-hide="requestLoading">
+<div ng-show="requestError && !requestLoading">
 	<i class="fa fa-warning fa-5x">
 		Oops!
 	</i>
