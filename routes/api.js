@@ -139,8 +139,6 @@ module.exports = function (app) {
 						});
 					});
 
-				console.log(response.items[0]);
-
 				rs.json(response);
 			});
 		});
