@@ -1,5 +1,5 @@
 <section>
-	<h3 class="header">Current Server: <%=%></h3>
+	<h3 class="header"><%=selected.address%></h3>
 	<div class="row">
 		<div class="col-md-3">
 			<button class="btn btn-md inline-button">Batida</button>
@@ -18,11 +18,13 @@
 </section>
 
 <section>
-	<div class="row">
-		<div class="col-md-3">
-			<div class="server-container">
-				<i class="fa fa-database fa-lg">10.0.0.7</i>
-			</div>
-		</div>
+	<div class="row" >
+		<div
+			class="col-md-12"
+			cs-selectable="address|selected|servers">
+			<div class="server-container" ng-click="select(current)" ng-repeat="current in servers">
+				<i class="fa fa-database"></i>&nbsp;<%=current.address%>
+			</div
+>		</div>
 	</div>
 <section>

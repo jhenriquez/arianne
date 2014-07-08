@@ -12,4 +12,7 @@ angular.module('ApplicationModule')
 		return $resource('/api/:installation/:server/:imei', {}, {
 			search: { method: 'get', isArray: false }
 		});
+	})
+	.factory('$serverService', function ($resource) {
+		return $resource('/api/server', {}, {});
 	});

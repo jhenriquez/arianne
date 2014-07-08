@@ -10,7 +10,8 @@ var PROCESSES_QUERY =
 
 var UNIT_INFORMATION_QUERY = 
 	"SELECT I.ItemID, I.ItemName, I.IMEI, I.[Status], H.HardwareID, H.HardwareName, H.ParserName, H.PortNumbers, " +
-	"H.IgnitionSensor, H.BatterySensor, H.VibrationSensor, H.ReedSensor, H.SpeedSensor, H.TemperatureSensor, H.UseDeviceOdometer, H.UseDeviceEngineHour, H.FuelSensor, H.Temperature2Sensor " +
+	"H.IgnitionSensor, H.BatterySensor, H.VibrationSensor, H.ReedSensor, H.SpeedSensor, H.TemperatureSensor, H.UseDeviceOdometer, " +
+	"H.UseDeviceEngineHour, H.FuelSensor, H.Temperature2Sensor " +
 	"FROM dbo.Item I " +
 	"JOIN Config.Hardware H " +
 	"ON I.HardwareID = H.HardwareID " +
@@ -36,6 +37,28 @@ module.exports = function (app) {
 			});
 	});
 
+	app.get('/api/server', function (rq, rs) {
+		Installation.aggregate({$group: {_id: '$dbServer'} }, function (err, rows) {
+			var response = {};
+			
+			if(err) {
+				response.err = err;
+				return response;
+			}
+
+			if (rows.length > 0)
+				response.servers = [];
+
+			rows.forEach(function(row) {
+				response.servers.push({
+					address: row._id
+				});
+			})
+
+			rs.json(response);
+		});
+	});
+
 	app.get('/api/:installation/:server/processing', function (rq, rs) {
 		var cfg = { 
 				user : databases.kingslanding.username,
@@ -59,10 +82,10 @@ module.exports = function (app) {
 
                 rows.forEach(function (row) {
                 	response.processing.push({
-					process: row.ProcessName,
-					currentID: row.LastID,
-					lastActivity: row.LastActivityDate,
-					delta: row.Delta
+						process: row.ProcessName,
+						currentID: row.LastID,
+						lastActivity: row.LastActivityDate,
+						delta: row.Delta
 					});
 				});
 
@@ -91,57 +114,56 @@ module.exports = function (app) {
 			statement.input('IMEI', sql.NVarChar);
 			statement.prepare(UNIT_INFORMATION_QUERY, function (err) {
 
-			if (err) {
-				response.err = err;
-				return rs.json(response);
-			}
-
-			statement.execute({ IMEI: rq.params.imei }, function (err, rows) {
-
 				if (err) {
 					response.err = err;
 					return rs.json(response);
 				}
 
-				if(rows.length === 0) {
-					response.err = { message: 'No information was found associated to this IMEI.', notfound: true };
-					return rs.json(response);	
-				}
-							
-				response.items = [];
+				statement.execute({ IMEI: rq.params.imei }, function (err, rows) {
 
-				rows.forEach(function (row) {
-					response.items.push({
-						id: row.ItemID,
-						name: row.ItemName,
-						status: row.Status,
-						imei: row.IMEI,
-						hardware: {
-							id: row.HardwareID,
-							name: row.HardwareName,
-							parser: row.ParserName,
-							ports: row.PortNumbers,
-							deviceOdometer: row.UseDeviceOdometer,
-							deviceEngineHours: row.UseDeviceEngineHour
-							},
-						sensors: {
-							ignition: row.IgnitionSensor,
-							battery: row.BatterySensor,
-							vibration: row.VibrationSensor,
-							reed: row.ReedSensor,
-							speed: row.SpeedSensor,
-							temperature: {
-								one: row.TemperatureSensor,
-								two: row.Temperature2Sensor
+					if (err) {
+						response.err = err;
+						return rs.json(response);
+					}
+
+					if(rows.length === 0) {
+						response.err = { message: 'No information was found associated to this IMEI.', notfound: true };
+						return rs.json(response);	
+					}
+								
+					response.items = [];
+
+					rows.forEach(function (row) {
+						response.items.push({
+							id: row.ItemID,
+							name: row.ItemName,
+							status: row.Status,
+							imei: row.IMEI,
+							hardware: {
+								id: row.HardwareID,
+								name: row.HardwareName,
+								parser: row.ParserName,
+								ports: row.PortNumbers,
+								deviceOdometer: row.UseDeviceOdometer,
+								deviceEngineHours: row.UseDeviceEngineHour
 								},
-							fuel: row.FuelSensor
-							}
+							sensors: {
+								ignition: row.IgnitionSensor,
+								battery: row.BatterySensor,
+								vibration: row.VibrationSensor,
+								reed: row.ReedSensor,
+								speed: row.SpeedSensor,
+								temperature: {
+									one: row.TemperatureSensor,
+									two: row.Temperature2Sensor
+									},
+								fuel: row.FuelSensor
+								}
+							});
 						});
-					});
-
-				rs.json(response);
+					rs.json(response);
+				});
 			});
-		});
 		});
 	});
 };
