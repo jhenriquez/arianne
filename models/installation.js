@@ -7,7 +7,14 @@ var installationSchema = Schema({
 	connectionString: String,
 	dbase : String,
 	engine : String,
-	mailSenderName : String
+	mailSenderName : String,
+	engines: {
+		engine: String,
+		geocode: String,
+        reminder: String,
+        alert: String
+	},
+	report: String
 });
 
 module.exports = goose.model('Installation', installationSchema);

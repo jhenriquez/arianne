@@ -42,3 +42,16 @@
 .anchor-linkless-pointer {
   cursor: pointer;  
 }
+
+.server-container {
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  width: 100%;
+  padding: 5px;
+}
+
+.server-container:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}

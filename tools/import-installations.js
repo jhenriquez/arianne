@@ -25,9 +25,18 @@ var cn = new sql.Connection(config, function (err) {
                     $set : {
                         name: row.SiteName,
                         site: row.DataBaseName,
-                        dbase: row.DBServer.replace('[','').replace(']',''),
+                        dbase: row.DBIPaddress,
                         connectionString: row.ConnectionString,
-                        engine: row.MsgEngineServer
+                        engine: row.MsgEngineServer,
+                        version: row.Version,
+                        language: row.Language,
+                        engines: {
+                        	engine: row.MsgEngineServer,
+                        	geocode: row.GeoCodeEngine,
+                        	reminder: row.ReminderEngine,
+                        	alert: row.AlertEngine
+                        },
+                        report: row.ReportServer
                     }
 				},
                 { upsert : true },
