@@ -47,11 +47,21 @@
   border-radius: 5px;
   border: 1px solid lightgray;
   width: 100%;
-  padding: 5px;
+  padding: 15px;
+  margin: 5px;
 }
 
 .server-container:hover {
-  background-color: black;
+  background-color: lightgray;
   color: white;
   cursor: pointer;
+}
+
+.selected {
+  background-color: lightgray;
+   border-radius: 5px;
+  border: 1px solid lightgray;
+  width: 100%;
+  padding: 15px;
+  margin: 5px;
 }

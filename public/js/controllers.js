@@ -149,5 +149,20 @@ angular.module('ApplicationModule')
 			$scope.requestUnitInformation();
 		});
 	})
-	.controller('MaintenanceController', function ($scope) {
+	.controller('MaintenanceController', function ($scope, $serverService) {
+		$scope.select = function select (server) {
+			if(!server || server === $scope.selected)
+				return;
+			$scope.selected = server;
+		}
+
+		$serverService.get({}, function (response) {
+			if(response.err) {
+				$scope.requestError = true;
+			}
+			$scope.servers = response.servers;
+		});
+
+	})
+	.controller('ServerMaintenanceController', function ($scope, $serverService) {
 	});

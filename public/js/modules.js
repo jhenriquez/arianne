@@ -1,6 +1,8 @@
 "use strict";
 
-angular.module('ApplicationModule', ['ngResource', 'ngRoute'])
+angular.module('CustomDirectives', []);
+
+angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives'])
 	.config(function($interpolateProvider, $routeProvider, $locationProvider) {
 		// configure angular binding interpolation symbols
 		$interpolateProvider.startSymbol('<%=');
