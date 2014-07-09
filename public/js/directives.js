@@ -1,35 +1,26 @@
 angular.module('CustomDirectives')
-	.directive('csSelectable', function () {
+	.directive('csSelectable',['$timeout', function ($timeout) {
 		return {
 			restrict: 'A',
 			link: function (scope, element, attrs) {
-				var values = attrs.csSelectable.split('|'),
-					selector = values[1],
-					property = values[0],
-					items = values[2];
-
-				if(!selector || !property || !items)
-					return;
-
-				scope.$watch(selector, function () {
-					updateSelection(scope[selector]);
+				scope.$watch(function () { return element[0].children.length; }, function () {
+					for(var i = 0; i < element[0].children.length; i++) {
+						(function () {
+							var index = i;
+							angular.element(element[0].children[i]).on('click', function () {
+								clearClass();
+								angular.element(element[0].children[index]).addClass(attrs.csSelectable);
+							})
+						})();
+					}
 				});
 
-				function updateSelection (selected) {
-					if (!selected || !scope[items])
-						return;
-					scope[items].forEach(function (value) {
-						if(selected === value) {
-							for(var i = 0; i < element[0].children.length; i++) {
-								if(angular.element(element[0].children[i]).hasClass('selected'))
-									angular.element(element[0].children[i]).removeClass('selected');
-								if(element[0].children[i].outerText.trim() == selected[property]) {
-									angular.element(element[0].children[i]).addClass('selected');
-								}
-							}
-						};
-					});
+				function clearClass () {
+					for(var i = 0; i < element[0].children.length; i++) {
+						if(angular.element(element[0].children[i]).hasClass(attrs.csSelectable))
+							angular.element(element[0].children[i]).removeClass(attrs.csSelectable);
+					}
 				}
 			}
 		}
-	});
+	}]);
