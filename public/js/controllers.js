@@ -104,6 +104,8 @@ angular.module('ApplicationModule')
 		}
 
 		$scope.requestUnitInformation = function requestUnitInformation () {
+			if(!$routeParams.imei)
+				return;
 			$scope.requestLoading = true;
 			$unitService.search({installation: $routeParams.installation, imei: $routeParams.imei, server: $current.installation.dbase },
 				function (response) {
