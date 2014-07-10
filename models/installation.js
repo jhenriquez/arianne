@@ -7,6 +7,7 @@ var installationSchema = Schema({
 	connectionString: String,
 	dbase : String,
 	dbServer: String,
+	serverName: String,
 	mailSenderName : String,
 	engines: {
 		engine: String,

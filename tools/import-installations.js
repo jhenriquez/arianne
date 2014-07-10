@@ -31,6 +31,7 @@ var cn = new sql.Connection(config, function (err) {
                         version: row.Version,
                         language: row.Language,
                         dbServer: row.DBServer.replace('[','').replace(']',''),
+                        serverName: row.DBServer,
                         engines: {
                         	engine: row.MsgEngineServer,
                         	geocode: row.GeoCodeEngine,
