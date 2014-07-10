@@ -4,7 +4,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-3">
-			<button class="btn btn-md inline-button">Batida</button>
+			<button class="btn btn-md inline-button" data-toggle="modal" data-target="#executeCommand" ng-click="requestServerStats()">Batida</button>
 		</div>
 	</div>
 	<br />
@@ -21,3 +21,51 @@
 >		</div>
 	</div>
 <section>
+
+<div class="modal fade" id="executeCommand">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+			<div class="modal-header">
+	        	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	        	<h4 class="modal-title">Modal title <%=executeText%></h4>
+	      	</div>
+	      	<div class="modal-body">
+	      		<div class="row">
+	      			<div class="col-md-12">
+	      				<div ng-show="errOnStats">
+							<i class="fa fa-warning fa-5x">
+								Oops!
+							</i>
+							<h4>
+								There was an error requesting server stats.
+							</h4>
+						</div>
+						<div ng-show="isLoadingStats">
+							<i class="fa fa-spin fa-5x"></i>
+						</div>
+						<div class="table-responsive">
+							<table class="table">
+						    	<tr>
+						    		<th>Created</th>
+						    		<th>LogSize</th>
+						    		<th>Status</th>
+						    		<th>LogState</th>
+						    	</tr>
+						    	<tr ng-repeat="log in tempLogSizes">
+						    		<td><%=log.Created%></td>
+						    		<td><%=log.Logsize%></td>
+						    		<td><%=log.Status%></td>
+						    		<td><%=log.LogState%></td>
+						    	<tr>
+							</table>
+						</div>
+	      			</div><!-- /.column -->
+	      		</div><!-- /.row -->
+			</div>
+			<div class="modal-footer">
+	        	<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+			</div>
+	    </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+

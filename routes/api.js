@@ -17,6 +17,16 @@ var UNIT_INFORMATION_QUERY =
 	"ON I.HardwareID = H.HardwareID " +
 	"WHERE IMEI = @IMEI;";
 
+var SERVER_STATS_QUERY = "SELECT TOP 10 * FROM [192.168.7.80\\MSSQLBeta].positionlogic.dbo.templogsize WHERE ServerName = @server ORDER BY Created DESC " +
+" CREATE TABLE #OpenTranStatus ( ActiveTransaction varchar(25),Details sql_variant) " +
+"INSERT INTO #OpenTranStatus " +
+"EXEC ('DBCC OPENTRAN (''tempdb'') WITH TABLERESULTS, NO_INFOMSGS'); " +
+"DECLARE @_SPID int " +
+"SELECT @_SPID=convert(int,Details) FROM #OpenTranStatus WHERE activetransaction ='OLDACT_SPID' " +
+"DBCC INPUTBUFFER(@_SPID) " +
+"SELECT @_SPID AS 'SPID' " +
+"DROP TABLE #OpenTranStatus";
+
 module.exports = function (app) {
 	app.get('/api/installation/search/:search', function (rq, rs) {
 		Installation.find({ name: { $regex : new RegExp(rq.params.search, 'i') } }, {}, { limit: 10 },
@@ -38,12 +48,12 @@ module.exports = function (app) {
 	});
 
 	app.get('/api/server', function (rq, rs) {
-		Installation.aggregate({$group: {_id: '$dbServer'} }, function (err, rows) {
+		Installation.aggregate({ $group: { _id: { dbServer: '$dbServer', serverName: '$serverName' } } }, function (err, rows) {
 			var response = {};
 			
 			if(err) {
 				response.err = err;
-				return response;
+				return rs.json(response);
 			}
 
 			if (rows.length > 0)
@@ -51,12 +61,57 @@ module.exports = function (app) {
 
 			rows.forEach(function(row) {
 				response.servers.push({
-					address: row._id
+					address: row._id.dbServer,
+					name: row._id.serverName
 				});
 			})
 
 			rs.json(response);
 		});
+	});
+
+	app.get('/api/server/:server', function (rq, rs) {
+		var cfg = { 
+				user : databases.kingslanding.username,
+				password: databases.kingslanding.password, 
+				server: rq.params.server, 
+				database: 'master'
+			},
+			response = {};
+
+			cnn = new sql.Connection(cfg, function (err) {
+				if (err) {
+					response.err = err;
+					console.log(err);
+					return rs.json(response);
+				}
+
+				var statement = new sql.PreparedStatement(cnn);
+
+				statement.input('server', sql.NVarChar);
+				statement.multiple = true;
+				statement.prepare(SERVER_STATS_QUERY, function (err) {
+					if(err) {
+						response.err = err;
+						console.log(err);1
+						return rs.json(response);
+					}
+
+					statement.execute({ server: rq.params.server }, function (err, rows) {
+						if(err) {
+							response.err = err;
+							console.log(err);1
+							return rs.json(response);
+						}
+
+						response.tempLogSize = rows[0];
+						response.processDetail = rows[1];
+						response.processId = rows[2];
+
+						rs.json(response);
+					});
+				});
+			});
 	});
 
 	app.get('/api/:installation/:server/processing', function (rq, rs) {

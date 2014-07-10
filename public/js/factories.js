@@ -14,5 +14,7 @@ angular.module('ApplicationModule')
 		});
 	})
 	.factory('$serverService', function ($resource) {
-		return $resource('/api/server', {}, {});
+		return $resource('/api/server', {}, {
+			stats: { url: '/api/server/:server', method: 'get', isArray: false }
+		});
 	});

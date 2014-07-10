@@ -156,7 +156,21 @@ angular.module('ApplicationModule')
 			if(!server || server === $scope.selected)
 				return;
 			$scope.selected = server;
-		}
+		};
+
+		$scope.requestServerStats = function requestServerStats () {
+			$scope.isLoadingStats = true;
+			$serverService.stats ({server: $scope.selected.name }, function (rs) {
+				if(rs.err) {
+					return $scope.errOnStats = true;
+				}
+				$scope.tempLogSizes = rs.tempLogSize;
+				$scope.process = rs.processDetail;
+				$scope.processId = rs.processId;
+				$scope.errOnStats = false;
+				$scope.isLoadingStats = false;
+			});
+		};
 
 		$serverService.get({}, function (response) {
 			if(response.err) {
@@ -165,6 +179,5 @@ angular.module('ApplicationModule')
 			$scope.servers = response.servers;
 		});
 
-	})
-	.controller('ServerMaintenanceController', function ($scope, $serverService) {
 	});
+	
