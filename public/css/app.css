@@ -46,22 +46,11 @@
 .server-container {
   border-radius: 5px;
   border: 1px solid lightgray;
-  width: 100%;
+  width: 100%%;
   padding: 15px;
-  margin: 5px;
-}
-
-.server-container:hover {
-  background-color: lightgray;
-  color: white;
-  cursor: pointer;
+  margin-bottom: 5px;
 }
 
 .selected {
   background-color: lightgray;
-   border-radius: 5px;
-  border: 1px solid lightgray;
-  width: 100%;
-  padding: 15px;
-  margin: 5px;
 }

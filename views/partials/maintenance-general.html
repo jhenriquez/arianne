@@ -1,15 +1,8 @@
-<section>
-	<h3 class="header"><%=selected.address%></h3>
+<section ng-show="selected">
+	<div class="server-container">
+		<i class="fa fa-database"></i>&nbsp;<%=selected.address%>
+	</div>
 	<div class="row">
-		<div class="col-md-3">
-			<button class="btn btn-md inline-button">Batida</button>
-		</div>
-		<div class="col-md-3">
-			<button class="btn btn-md inline-button">Batida</button>
-		</div>
-		<div class="col-md-3">
-			<button class="btn btn-md inline-button">Batida</button>
-		</div>
 		<div class="col-md-3">
 			<button class="btn btn-md inline-button">Batida</button>
 		</div>
@@ -22,7 +15,7 @@
 		<div
 			class="col-md-12"
 			cs-selectable="selected">
-			<div class="server-container" ng-click="select(current)" ng-repeat="current in servers">
+			<div class="server-container btn-essense" ng-click="select(current)" ng-repeat="current in servers">
 				<i class="fa fa-database"></i>&nbsp;<%=current.address%>
 			</div
 >		</div>
