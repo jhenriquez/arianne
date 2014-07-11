@@ -76,7 +76,7 @@ module.exports = function (app) {
 		var cfg = { 
 				user : databases.kingslanding.username,
 				password: databases.kingslanding.password, 
-				server: rq.params.server, 
+				server: rq.params.server.replace('[','').replace(']',''),
 				database: 'master'
 			},
 			response = {};
