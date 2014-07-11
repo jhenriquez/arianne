@@ -162,6 +162,7 @@ angular.module('ApplicationModule')
 			$scope.isLoadingStats = true;
 			$serverService.stats ({server: $scope.selected.name }, function (rs) {
 				if(rs.err) {
+					$scope.isLoadingStats = false;
 					return $scope.errOnStats = true;
 				}
 				$scope.tempLogSizes = rs.tempLogSize;

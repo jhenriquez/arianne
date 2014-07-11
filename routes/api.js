@@ -59,6 +59,8 @@ module.exports = function (app) {
 			if (rows.length > 0)
 				response.servers = [];
 
+			console.log(rows);
+
 			rows.forEach(function(row) {
 				response.servers.push({
 					address: row._id.dbServer,

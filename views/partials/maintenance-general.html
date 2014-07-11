@@ -31,9 +31,9 @@
 	      	</div>
 	      	<div class="modal-body">
 	      		<div class="row">
-	      			<div class="col-md-12">
-	      				<div ng-show="errOnStats">
-							<i class="fa fa-warning fa-5x">
+	      			<div class="col-md-6 col-md-offset-3 text-center">
+	      				<div ng-hide="!errOnStats || isLoadingStats">
+							<i class="fa fa-warning fa-3x">
 								Oops!
 							</i>
 							<h4>
@@ -41,9 +41,11 @@
 							</h4>
 						</div>
 						<div ng-show="isLoadingStats">
-							<i class="fa fa-spin fa-5x"></i>
+							<i class="fa fa-cog fa-spin fa-5x"></i>
 						</div>
-						<div class="table-responsive">
+	      			</div>
+	      			<div class="col-md-12">
+	      				<div class="table-responsive" ng-hide="isLoadingStats || errOnStats">
 							<table class="table">
 						    	<tr>
 						    		<th>Created</th>
@@ -59,8 +61,20 @@
 						    	<tr>
 							</table>
 						</div>
-	      			</div><!-- /.column -->
+	      			</div>
 	      		</div><!-- /.row -->
+	      		<section ng-hide="isLoadingStats || errOnStats">
+	      			<h3 class="page-header">Process Details</h3>
+		      		<div class="row">
+		      			<div class="col-md-8">
+		      				<strong>Name:</strong>&nbsp;A humble process<br/>
+		      				<strong>ID:</strong>&nbsp;<span class="text-danger">293838</span>
+		      			</div>
+		      			<div class="col-md-4">
+		      				<button class="btn btn-danger">Kill It With Fire!</button>
+		      			</div>
+		      		</div><!-- /.row -->
+	      		</section>
 			</div>
 			<div class="modal-footer">
 	        	<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
