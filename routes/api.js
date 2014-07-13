@@ -17,15 +17,16 @@ var UNIT_INFORMATION_QUERY =
 	"ON I.HardwareID = H.HardwareID " +
 	"WHERE IMEI = @IMEI;";
 
-var SERVER_STATS_QUERY = "SELECT TOP 10 * FROM [192.168.7.80\\MSSQLBeta].positionlogic.dbo.templogsize WHERE ServerName = @server ORDER BY Created DESC " +
-" CREATE TABLE #OpenTranStatus ( ActiveTransaction varchar(25),Details sql_variant) " +
-"INSERT INTO #OpenTranStatus " +
-"EXEC ('DBCC OPENTRAN (''tempdb'') WITH TABLERESULTS, NO_INFOMSGS'); " +
-"DECLARE @_SPID int " +
-"SELECT @_SPID=convert(int,Details) FROM #OpenTranStatus WHERE activetransaction ='OLDACT_SPID' " +
-"DBCC INPUTBUFFER(@_SPID) " +
-"SELECT @_SPID AS 'SPID' " +
-"DROP TABLE #OpenTranStatus";
+var SERVER_STATS_QUERY =
+	"SELECT TOP 5 * FROM [192.168.7.80\\MSSQLBeta].positionlogic.dbo.templogsize WHERE ServerName = @server ORDER BY Created DESC " +
+	"CREATE TABLE #OpenTranStatus ( ActiveTransaction varchar(25),Details sql_variant) " +
+	"INSERT INTO #OpenTranStatus " +
+	"EXEC ('DBCC OPENTRAN (''tempdb'') WITH TABLERESULTS, NO_INFOMSGS'); " +
+	"DECLARE @_SPID int " +
+	"SELECT @_SPID=convert(int,Details) FROM #OpenTranStatus WHERE activetransaction ='OLDACT_SPID' " +
+	"DBCC INPUTBUFFER(@_SPID) " +
+	"SELECT @_SPID AS 'SPID' " +
+	"DROP TABLE #OpenTranStatus";
 
 module.exports = function (app) {
 	app.get('/api/installation/search/:search', function (rq, rs) {

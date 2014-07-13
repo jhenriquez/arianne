@@ -13,7 +13,7 @@ module.exports = function (app, passport) {
 
 	app.get('/logout', function (rq, rs) {
 		rq.logOut();
-		rs.redirect('/');
+		rs.redirect('/');	
 	});
 
 	app.post('/login', passport.authenticate('user-local-login', {

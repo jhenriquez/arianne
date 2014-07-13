@@ -152,25 +152,67 @@ angular.module('ApplicationModule')
 		});
 	})
 	.controller('MaintenanceController', function ($scope, $serverService) {
+
+		function requestTmpDBStats (onSuccess, onErr) {
+			if(!$scope.selected.name) return onErr();
+			$serverService.stats ({server: $scope.selected.name }, function (rs) {
+				if(rs.err) {
+					return onErr(rs);
+				}
+				$scope.tempLogSizes = rs.tempLogSize;
+				$scope.process = rs.processDetail;
+				$scope.processId = rs.processId;
+				onSuccess(rs);
+			});
+		};
+
+		var executionContext = {
+			contextFunction: undefined
+		}
+
 		$scope.select = function select (server) {
 			if(!server || server === $scope.selected)
 				return;
 			$scope.selected = server;
 		};
 
-		$scope.requestServerStats = function requestServerStats () {
+		$scope.loadContextStats = function loadContextStats () {
+			if(!executionContext.contextFunction) return;
+
 			$scope.isLoadingStats = true;
-			$serverService.stats ({server: $scope.selected.name }, function (rs) {
-				if(rs.err) {
-					$scope.isLoadingStats = false;
-					return $scope.errOnStats = true;
-				}
-				$scope.tempLogSizes = rs.tempLogSize;
-				$scope.process = rs.processDetail;
-				$scope.processId = rs.processId;
+			$scope.errOnStats = false;
+
+			executionContext.contextFunction (function (rs) {
+				$scope.isLoadingStats = false;
 				$scope.errOnStats = false;
+			},
+			function(rs) {
+				$scope.errOnStats = true;
 				$scope.isLoadingStats = false;
 			});
+		};
+
+		$scope.reloadContextStats  = function reloadTempDBStats () {
+			if(!executionContext.contextFunction) return;
+			
+			$scope.isReloadingStats = true;
+			$scope.errReloadingStats = false;
+
+			executionContext.contextFunction (function (rs) {
+				// onSuccess
+				$scope.isReloadingStats = false;
+				$scope.errReloadingStats = false;
+			},
+			function (rs) {
+				// onErr
+				$scope.isReloadingStats = false;
+				$scope.errReloadingStats = true;
+			});
+		};
+
+		$scope.executeTmpDB = function executeTmpDB () {
+			executionContext.contextFunction = requestTmpDBStats;
+			$scope.loadContextStats();
 		};
 
 		$serverService.get({}, function (response) {
