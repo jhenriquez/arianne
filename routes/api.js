@@ -108,8 +108,8 @@ module.exports = function (app) {
 						}
 
 						response.tempLogSize = rows[0];
-						response.processDetail = rows[1];
-						response.processId = rows[2];
+						response.processDetail = rows[1][0];
+						response.processId = rows[2][0];
 
 						rs.json(response);
 					});

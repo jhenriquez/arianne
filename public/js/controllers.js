@@ -161,7 +161,7 @@ angular.module('ApplicationModule')
 				}
 				$scope.tempLogSizes = rs.tempLogSize;
 				$scope.process = rs.processDetail;
-				$scope.processId = rs.processId;
+				$scope.processId = rs.processId.SPID;
 				onSuccess(rs);
 			});
 		};
