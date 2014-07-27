@@ -6,15 +6,11 @@ var express = require('express'),
 	params = require('express-params'),
 	goose = require('mongoose'),
 	body = require('body-parser'),
-	cookie = require('cookie-parser'),
-	session = require('express-session'),
-	flash = require('connect-flash'),
 	swig = require('swig'),
 	app = express();
 
 // declare more specifically configured dependencies.
-var passport = require('./config/passport'),
-	databases = require('./config/databases'),
+var databases = require('./config/databases'),
 	routes = require('./routes'),
 	api = require('./routes/api');
 
@@ -26,11 +22,6 @@ app.set('view engine', 'html');
 params.extend(app);
 app.use(morgan());
 app.use(body());
-app.use(cookie());
-app.use(flash());
-app.use(session({ secret : 'Velvet Secret They Fear' }));
-app.use(passport.initialize());
-app.use(passport.session());
 
 
 // configure Static Content
@@ -38,7 +29,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/views/partials'));
 
 // initialize routes (html and api)
-routes(app, passport);
+routes(app);
 api(app);
 
 //  initialize mongoose data connection
