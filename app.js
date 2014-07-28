@@ -28,12 +28,12 @@ app.use(body());
 // configure Static Content
 app.use(express.static(__dirname + '/public'));
 
+// configure express-jwt
+app.use('/api', eJwt({ secret: 'I\'m King!' }));
+
 // initialize routes (html and api)
 routes(app);
 api(app);
-
-// configure express-jwt
-app.use('/api', eJwt({ secret: 'I\'m King!' }));
 
 //  initialize mongoose data connection
 goose.connect(databases.oberyn);
