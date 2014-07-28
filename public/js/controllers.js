@@ -3,6 +3,10 @@
 angular.module('ApplicationModule')
 	.controller('HomeController', function ($scope, $installationService, $current, $location) {
 
+		$scope.$on('auth:authentication-required', function (info) {
+			$scope.showLogin = true;
+		});
+
 		$scope.searchInstallations = function searchInstallations () {
 			if(!$scope.searchValue) {
 				$scope.installations = [];

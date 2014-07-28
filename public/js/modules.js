@@ -3,7 +3,7 @@
 angular.module('CustomDirectives', []);
 
 angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives'])
-	.config(function($interpolateProvider, $routeProvider, $locationProvider) {
+	.config(function($interpolateProvider, $routeProvider, $locationProvider, $httpProvider) {
 		// configure angular binding interpolation symbols
 		$interpolateProvider.startSymbol('<%=');
 		$interpolateProvider.endSymbol('%>');
@@ -38,4 +38,18 @@ angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives'
 				templateUrl: 'partials/unit-notfound.html',
 				controller: 'PartialErrorController'
 			});
+
+		$httpProvider.interceptors.push(function ($q, $rootScope) {
+			return {
+				'responseError': function (re) {
+					if(re.status === 401) {
+						var deferred = $q.defer();
+						$rootScope.$broadcast('auth:authentication-required', {rejection: re, promise: deferred});
+						return deferred.promise;
+					}
+
+					return $q.reject(re);
+				}
+			};
+		});
 	});
