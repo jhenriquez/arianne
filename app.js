@@ -4,6 +4,7 @@
 var express = require('express'),
 	morgan = require('morgan'),
 	params = require('express-params'),
+	eJwt = require('express-jwt'),
 	goose = require('mongoose'),
 	body = require('body-parser'),
 	swig = require('swig'),
@@ -30,6 +31,9 @@ app.use(express.static(__dirname + '/public'));
 // initialize routes (html and api)
 routes(app);
 api(app);
+
+// configure express-jwt
+app.use('/api', eJwt({ secret: 'I\'m King!' }));
 
 //  initialize mongoose data connection
 goose.connect(databases.oberyn);
