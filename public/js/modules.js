@@ -2,7 +2,7 @@
 
 angular.module('CustomDirectives', []);
 
-angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives'])
+angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives', 'ui.bootstrap'])
 	.config(function($interpolateProvider, $routeProvider, $locationProvider, $httpProvider) {
 		// configure angular binding interpolation symbols
 		$interpolateProvider.startSymbol('<%=');
