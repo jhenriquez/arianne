@@ -1,10 +1,13 @@
 "use strict";
 
 angular.module('ApplicationModule')
-	.controller('HomeController', function ($scope, $installationService, $current, $location) {
+	.controller('HomeController', function ($scope, $installationService, $current, $location, $modal) {
 
 		$scope.$on('auth:authentication-required', function (info) {
-			$scope.showLogin = true;
+			$modal.open({
+				templateUrl: 'partials/login-required.html',
+				controller: 'authenticationController'
+			}).result.then(function() {}, function() { alert('dismissed!'); });
 		});
 
 		$scope.searchInstallations = function searchInstallations () {
@@ -226,5 +229,11 @@ angular.module('ApplicationModule')
 			$scope.servers = response.servers;
 		});
 
+	})
+	.controller('authenticationController', function ($scope) {
+		$scope.someText = 'Batida!';
+		$scope.ok = function () {
+			alert('ok!');
+		};
 	});
 	
