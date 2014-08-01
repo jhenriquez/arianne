@@ -1,11 +1,34 @@
-<h3 class"page-header">Login Required</h3>
-<div class="row">
-	<div class="col-md-4 col-md-offset-6">
-		<%=someText%>
+<div class="modal-body" ng-hide="requestingAuthentication">
+	<div class="row">
+		<div class="col-md-12">
+			Username:
+			<br />
+			<input 
+				type="text"
+				ng-model="username"
+				placeholder="Username"
+				class="form-control"
+				/>
+			<br />
+			Password:
+			<br />
+			<input 
+				type="password"
+				ng-model="password"
+				placeholder="Password"
+				class="form-control"
+				/>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<span class="pull-right">
+				<button class="btn btn-danger" ng-click="dismiss()">Cancel</button>
+				<button class="btn btn-primary" ng-click="authenticate()">Login</button>
+			<span>
+		</div>
 	</div>
 </div>
-<div class="row">
-	<div class="col-md-4 col-md-offset-6">
-		<button class="btn btn-md" ng-click="ok()">Accept</button>
-	</div>
+<div ng-show="requestingAuthentication">
+	<i class="fa fa-cog fa-spin fa-3x text-center"></i>
 </div>

@@ -230,10 +230,20 @@ angular.module('ApplicationModule')
 		});
 
 	})
-	.controller('authenticationController', function ($scope) {
-		$scope.someText = 'Batida!';
-		$scope.ok = function () {
-			alert('ok!');
+	.controller('authenticationController', function ($scope, $modalInstance, $http) {
+		$scope.username = 'undefined';
+		$scope.password = 'undefined';
+		$scope.authenticate = function () {
+			$scope.requestingAuthentication = true;
+			$http.post('/authenticate', { username: $scope.username, password: $scope.password })
+				.success(function (data) {
+					delete $scope.requestingAuthentication;
+					console.log(data);
+				})
+				.error(function () {
+					delete $scope.requestingAuthentication;
+					alert('error!');
+				});
 		};
 	});
 	
