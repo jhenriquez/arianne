@@ -1,14 +1,30 @@
 "use strict";
 
 angular.module('ApplicationModule')
-	.controller('HomeController', function ($scope, $installationService, $current, $location, $modal) {
+	.controller('HomeController', function ($scope, $installationService, $current, $location, $modal, $http) {
 
-		$scope.$on('auth:authentication-required', function (info) {
+		$scope.$on('auth:authentication-required', function (e, args) {
 			$modal.open({
 				templateUrl: 'partials/login-required.html',
-				controller: 'authenticationController'
-			}).result.then(function() {}, function() { alert('dismissed!'); });
+				controller: 'authenticationController',
+				backdrop: 'static'
+			}).result.then(
+				function(rs) {
+					if(rs === 'success')
+						retryHttpRequest(args.config, args.promise);
+				}
+			);
 		});
+
+		function retryHttpRequest(config, deferred) {
+			function successCallback(response) {
+	        	deferred.resolve(response);
+	      	}
+	      	function errorCallback(response) {
+	        	deferred.reject(response);
+	      	}
+			$http(config).then(successCallback, errorCallback);
+	    }
 
 		$scope.searchInstallations = function searchInstallations () {
 			if(!$scope.searchValue) {
@@ -230,20 +246,16 @@ angular.module('ApplicationModule')
 		});
 
 	})
-	.controller('authenticationController', function ($scope, $modalInstance, $http) {
-		$scope.username = 'undefined';
-		$scope.password = 'undefined';
+	.controller('authenticationController', function ($scope, $modalInstance, $http, $window) {
 		$scope.authenticate = function () {
 			$scope.requestingAuthentication = true;
 			$http.post('/authenticate', { username: $scope.username, password: $scope.password })
-				.success(function (data) {
+				.success(function (rs) {
 					delete $scope.requestingAuthentication;
-					console.log(data);
-				})
-				.error(function () {
-					delete $scope.requestingAuthentication;
-					alert('error!');
+					if (!rs.err) {
+						$window.sessionStorage.token = rs.token;
+						$modalInstance.close('success');
+					}
 				});
 		};
 	});
-	

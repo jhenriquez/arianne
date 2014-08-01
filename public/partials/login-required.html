@@ -3,32 +3,25 @@
 		<div class="col-md-12">
 			Username:
 			<br />
-			<input 
-				type="text"
-				ng-model="username"
-				placeholder="Username"
-				class="form-control"
-				/>
+			<input type="text" ng-model="$parent.username" placeholder="Username" class="form-control" />
 			<br />
 			Password:
 			<br />
-			<input 
-				type="password"
-				ng-model="password"
-				placeholder="Password"
-				class="form-control"
-				/>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<span class="pull-right">
-				<button class="btn btn-danger" ng-click="dismiss()">Cancel</button>
-				<button class="btn btn-primary" ng-click="authenticate()">Login</button>
-			<span>
+			<input type="password" ng-model="$parent.password" placeholder="Password" class="form-control" />
 		</div>
 	</div>
 </div>
-<div ng-show="requestingAuthentication">
-	<i class="fa fa-cog fa-spin fa-3x text-center"></i>
+<div class="modal-footer" ng-hide="requestingAuthentication">
+	<div class="row">
+		<div class="col-md-12">
+			<button class="btn btn-primary" ng-click="authenticate()">Login</button>
+		</div>
+	</div>
+</div>
+<div class="modal-body" ng-show="requestingAuthentication">
+	<div class="row text-center">
+		<div class="col-md-12">
+			<i class="fa fa-cog fa-spin fa-3x"></i>
+		</div>
+	</div>
 </div>
