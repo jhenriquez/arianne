@@ -39,12 +39,18 @@ angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives'
 				controller: 'PartialErrorController'
 			});
 
-		$httpProvider.interceptors.push(function ($q, $rootScope) {
+		$httpProvider.interceptors.push(function ($q, $rootScope, $window) {
 			return {
+				'request' : function (config) {
+					if($window.sessionStorage.token)
+						config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+					return config;
+				},
+
 				'responseError': function (re) {
 					if(re.status === 401) {
 						var deferred = $q.defer();
-						$rootScope.$broadcast('auth:authentication-required', {rejection: re, promise: deferred});
+						$rootScope.$broadcast('auth:authentication-required', {config: re.config, promise: deferred});
 						return deferred.promise;
 					}
 
