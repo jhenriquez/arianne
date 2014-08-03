@@ -2,8 +2,8 @@
 
 angular.module('CustomDirectives', []);
 
-angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives', 'ui.bootstrap'])
-	.config(function($interpolateProvider, $routeProvider, $locationProvider, $httpProvider) {
+angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives', 'ui.bootstrap', 'TokenAuthentication'])
+	.config(function($interpolateProvider, $routeProvider, $locationProvider, $httpProvider, $forbiddenCatcher, $tokenInjector) {
 		// configure angular binding interpolation symbols
 		$interpolateProvider.startSymbol('<%=');
 		$interpolateProvider.endSymbol('%>');
@@ -39,23 +39,6 @@ angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives'
 				controller: 'PartialErrorController'
 			});
 
-		$httpProvider.interceptors.push(function ($q, $rootScope, $window) {
-			return {
-				'request' : function (config) {
-					if($window.sessionStorage.token)
-						config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
-					return config;
-				},
-
-				'responseError': function (re) {
-					if(re.status === 401) {
-						var deferred = $q.defer();
-						$rootScope.$broadcast('auth:authentication-required', {config: re.config, promise: deferred});
-						return deferred.promise;
-					}
-
-					return $q.reject(re);
-				}
-			};
-		});
+			$httpProvider.interceptors.push($tokenInjector);
+			$httpProvider.interceptors.push($forbiddenCatcher);
 	});

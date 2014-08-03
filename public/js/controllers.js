@@ -1,30 +1,21 @@
 "use strict";
 
 angular.module('ApplicationModule')
-	.controller('HomeController', function ($scope, $installationService, $current, $location, $modal, $http) {
+	.controller('HomeController', function ($scope, $installationService, $current, $location, $modal, $authenticationService) {
 
 		$scope.$on('auth:authentication-required', function (e, args) {
 			$modal.open({
-				templateUrl: 'partials/login-required.html',
+				templateUrl: 'partials/login-form.html',
 				controller: 'authenticationController',
 				backdrop: 'static'
 			}).result.then(
 				function(rs) {
-					if(rs === 'success')
-						retryHttpRequest(args.config, args.promise);
-				}
-			);
+					$authenticationService.loginSuccessful();
+				},
+				function() {
+					$authenticationService.loginCancelled();	
+				});
 		});
-
-		function retryHttpRequest(config, deferred) {
-			function successCallback(response) {
-	        	deferred.resolve(response);
-	      	}
-	      	function errorCallback(response) {
-	        	deferred.reject(response);
-	      	}
-			$http(config).then(successCallback, errorCallback);
-	    }
 
 		$scope.searchInstallations = function searchInstallations () {
 			if(!$scope.searchValue) {
