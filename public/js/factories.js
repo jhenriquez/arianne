@@ -17,4 +17,10 @@ angular.module('ApplicationModule')
 		return $resource('/api/server', {}, {
 			stats: { url: '/api/server/:server', method: 'get', isArray: false }
 		});
+	})
+	.factory('$userService', function ($resource) {
+		return $resource('/api/me', {}, {
+			get: { url: '/api/me', method: 'get', isArray: false },
+			whoAmI: { url: '/api/me', method: 'get', isArray: false }
+		});
 	});
