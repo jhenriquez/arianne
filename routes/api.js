@@ -60,8 +60,6 @@ module.exports = function (app) {
 			if (rows.length > 0)
 				response.servers = [];
 
-			console.log(rows);
-
 			rows.forEach(function(row) {
 				response.servers.push({
 					address: row._id.dbServer,
@@ -85,7 +83,6 @@ module.exports = function (app) {
 			cnn = new sql.Connection(cfg, function (err) {
 				if (err) {
 					response.err = err;
-					console.log(err);
 					return rs.json(response);
 				}
 
@@ -96,14 +93,12 @@ module.exports = function (app) {
 				statement.prepare(SERVER_STATS_QUERY, function (err) {
 					if(err) {
 						response.err = err;
-						console.log(err);1
 						return rs.json(response);
 					}
 
 					statement.execute({ server: rq.params.server }, function (err, rows) {
 						if(err) {
 							response.err = err;
-							console.log(err);1
 							return rs.json(response);
 						}
 
