@@ -1,7 +1,9 @@
 "use strict";
 
 angular.module('ApplicationModule')
-	.controller('HomeController', function ($scope, $installationService, $current, $location, $modal, $authenticationService) {
+	.controller('HomeController', function ($scope, $installationService, $current, $location, $modal, $authenticationService, $userService) {
+
+		$scope.$current = $current;
 
 		$scope.$on('auth:authentication-required', function (e, args) {
 			$modal.open({
@@ -34,7 +36,7 @@ angular.module('ApplicationModule')
 		$scope.selectCustomer = function selectCustomer (installation) {
 			$scope.installations = [];
 			$scope.searchValue = '';
-			if ($current.installation != undefined && $current.installation.name != rs.installation.name)
+			if ($current.installation != undefined && $current.installation.name != installation.name)
 				$current.imei = undefined;
 			$current.installation = installation;
 		};
@@ -63,6 +65,18 @@ angular.module('ApplicationModule')
 			clazz += $current.installation ? '' : 'disabled';
 			return clazz.trim();
 		};
+
+		function getCurrentUserInformation () {
+			$scope.loadingUserInformation = true;
+			$userService.whoAmI({}, function (rs) {
+				if(rs.err)
+					return alert(rs.err.message);
+				$current.user = rs.user;
+				delete $scope.loadingUserInformation;
+			});
+		};
+
+		getCurrentUserInformation();
 	})
 	.controller('InstallationController', function ($scope, $installationService, $routeParams, $current, $location) {
 		$scope.requestStats = function requestStats () {
