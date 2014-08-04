@@ -45,7 +45,7 @@ angular.module('TokenAuthentication.Buffer', [])
 
 angular.module('TokenAuthentication', ['TokenAuthentication.Buffer'])
 	// Simple interceptor that catches 401 error responses and broadcasts it.
-	.constant('$forbiddenCatcher', function ($rootScope, $q, AuthenticationBuffer) {
+	.constant('$handleForbidden', function ($rootScope, $q, AuthenticationBuffer) {
 		return {
 			'responseError': function (re) {
 				if(re.status === 401) {
