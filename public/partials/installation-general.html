@@ -61,15 +61,11 @@
 	</div>
 	<br />
 	<div class="row">
-	  	<div class="col-sm-4"
-	  		ng-repeat="process in serverStats"
-	  		>
-	    	<div class="thumbnail text-center">
-		        <i class="fa fa-cogs fa-3x"></i>
-		        <div class="caption">
-				    <h4><%=process.delta%></h4>
-				    <%=process.process.replace('Engine.','')%>
-			    </div>
+	  	<div class="col-sm-4" ng-repeat="process in serverStats">
+	    	<div class="engine-stats">
+		        <i class="fa fa-cogs fa-lg"></i>
+		        <%=process.process.replace('Engine.','')%>
+		        <h4 class="text-center"><%=process.delta%></h4>
 		    </div>
 		</div>
 	</div>

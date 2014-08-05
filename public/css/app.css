@@ -49,3 +49,10 @@
 .selected {
   background-color: lightgray;
 }
+
+.engine-stats {
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  padding: 3px;
+  margin-bottom: 5px;
+}
