@@ -1,3 +1,4 @@
+<!--
 <div class="modal-body" ng-hide="requestingAuthentication">
 	<div class="row">
 		<div class="col-md-12">
@@ -24,4 +25,18 @@
 			<i class="fa fa-cog fa-spin fa-3x"></i>
 		</div>
 	</div>
+</div>
+-->
+<div class="modal-body" ng-hide="requestingAuthentication">
+	<form>
+		<div class="form-group">
+			<label>Username</label>
+			<input type="text" ng-model="$parent.username" placeholder="Username" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label>Password</label>
+			<input type="password" ng-model="$parent.password" placeholder="Username" class="form-control" />
+		</div>
+		<button type="submit" ng-click="authenticate()" class="btn btn-primary">Login</button>
+	</form>
 </div>
