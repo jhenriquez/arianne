@@ -5,7 +5,7 @@
 angular.module('TokenAuthentication.Buffer', [])
 	.service('AuthenticationBuffer', function ($injector) {
 
-		var requestBuffer = [];
+		this.requestPocket = [];
 
 		function rejectRequest(rejection, promise) {
 			promise.reject(rejection);
@@ -24,21 +24,21 @@ angular.module('TokenAuthentication.Buffer', [])
 	    };
 
 		this.addRequest = function addRequest (rejection, promise) {
-			requestBuffer.push({rejection: rejection, promise: promise});
+			this.requestPocket.push({rejection: rejection, promise: promise});
 		};
 
 		this.retry = function retry () {
-			requestBuffer.forEach(function (request) {
+			this.requestPocket.forEach(function (request) {
 				retryRequest(request.rejection.config, request.promise);
 			});
-			requestBuffer = [];
+			this.requestPocket = [];
 		};
 
 		this.reject = function reject () {
-			requestBuffer.forEach(function (request) {
+			this.requestPocket.forEach(function (request) {
 				rejectRequest(request.rejection, request.promise);
 			});
-			requestBuffer = [];
+			this.requestPocket = [];
 		};
 	});
 
@@ -50,8 +50,9 @@ angular.module('TokenAuthentication', ['TokenAuthentication.Buffer'])
 			'responseError': function (re) {
 				if(re.status === 401) {
 					var deferred = $q.defer();
+					if(AuthenticationBuffer.requestPocket.length === 0)
+						$rootScope.$broadcast('auth:authentication-required', {config: re.config, promise: deferred});
 					AuthenticationBuffer.addRequest(re, deferred);
-					$rootScope.$broadcast('auth:authentication-required', {config: re.config, promise: deferred});
 					return deferred.promise;
 				}
 				return $q.reject(re);
