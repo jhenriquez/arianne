@@ -30,7 +30,28 @@
 	</div>
 </div>
 <section ng-show="serverStats">
-	<h3 class="page-header">Engines</h3>
+	<h4 class="page-header">IMEI Search</h4>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<form ng-submit="search()">
+				<div class="input-group">
+					<input
+						type="text"
+						placeholder="Search Units"
+						class="form-control"
+						ng-model="imei"
+						ng-submit="unitSearch()"
+						/>
+					<span class="input-group-btn">
+						<button class="btn btn-md" ng-click="unitSearch()" ng-disabled="!imei">Search</button>
+					</span>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+<section ng-show="serverStats">
+	<h4 class="page-header">Engines</h4>
 	<div class="row">
 		<div class="col-md-2 col-md-offset-10" ng-click="refreshProcessing()">
 			<button class="btn btn-sm">

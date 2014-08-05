@@ -112,6 +112,11 @@ angular.module('ApplicationModule')
 			$scope.requestStats();
 		};
 
+		$scope.unitSearch = function unitSearch () {
+			if($scope.imei)
+				$location.path($routeParams.installation + '/' + $scope.imei);
+		};
+
 		$installationService.get({ name: $routeParams.installation }, function (rs) {
 			if(rs.err)
 				$location.path($routeParams.installation + '/notfound');
@@ -125,11 +130,6 @@ angular.module('ApplicationModule')
 		$scope.params = $routeParams;
 	})
 	.controller('UnitController', function ($scope, $routeParams, $current, $location, $unitService, $installationService) {
-
-		$scope.search = function search () {
-			if($scope.imei)
-				$location.path($routeParams.installation + '/' + $scope.imei);
-		}
 
 		$scope.requestUnitInformation = function requestUnitInformation () {
 			if(!$routeParams.imei)
@@ -252,6 +252,14 @@ angular.module('ApplicationModule')
 
 	})
 	.controller('authenticationController', function ($scope, $modalInstance, $http, $window) {
+		$scope.$on('auth:login-successful', function() {
+			$modalInstance.close();
+		});
+
+		$scope.$on('auth:login-cancelled', function() {
+			$modalInstance.close();
+		});
+
 		$scope.authenticate = function () {
 			$scope.requestingAuthentication = true;
 			$http.post('/authenticate', { username: $scope.username, password: $scope.password })
