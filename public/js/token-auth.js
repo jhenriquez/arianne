@@ -68,12 +68,14 @@ angular.module('TokenAuthentication', ['TokenAuthentication.Buffer'])
 			}
 		};
 	})
-	.service('$authenticationService', function (AuthenticationBuffer) {
+	.service('$authenticationService', function (AuthenticationBuffer, $rootScope) {
 		this.loginSuccessful = function loginSuccessful() {
+			$rootScope.$broadcast('auth:login-successful');
 			AuthenticationBuffer.retry();
 		};
 
 		this.loginCancelled = function loginCancelled() {
+			$rootScope.$broadcast('auth:login-cancelled');
 			AuthenticationBuffer.reject();
 		};
 	});

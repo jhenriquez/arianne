@@ -22,21 +22,17 @@ angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives'
 				templateUrl: 'partials/installation-notfound.html',
 				controller: 'PartialErrorController'	
 			})
-			.when('/:installation/units', {
-				templateUrl: 'partials/unit-search.html',
-				controller: 'UnitController'
-			})
 			.when('/:installation/:imei', {
-				templateUrl: 'partials/unit-general.html',
-				controller: 'UnitController'
-			})
-			.when('/:installation/:imei/:item', {
 				templateUrl: 'partials/unit-general.html',
 				controller: 'UnitController'
 			})
 			.when('/:installation/:imei/notfound', {
 				templateUrl: 'partials/unit-notfound.html',
 				controller: 'PartialErrorController'
+			})
+			.when('/:installation/:imei/:item', {
+				templateUrl: 'partials/unit-general.html',
+				controller: 'UnitController'
 			});
 
 			$httpProvider.interceptors.push($tokenInjector);
