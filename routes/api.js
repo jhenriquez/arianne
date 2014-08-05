@@ -2,21 +2,6 @@ var Installation = require('../models/installation'),
 	databases = require('../config/databases'),
 	sql = require('mssql');
 
-var PROCESSES_QUERY =
-    "DECLARE @MAXID BIGINT = (SELECT MAX(MessageID) FROM [Message].[Raw]) " +
-    "SELECT ProcessName, LastID, LastActivityDate, @MAXID - LastID AS Delta " +
-    "FROM [dbo].[ProcessHistory] (nolock) " +
-    "WHERE ProcessName LIKE 'Engine%' ";
-
-var UNIT_INFORMATION_QUERY = 
-	"SELECT I.ItemID, I.ItemName, I.IMEI, I.[Status], H.HardwareID, H.HardwareName, H.ParserName, H.PortNumbers, " +
-	"H.IgnitionSensor, H.BatterySensor, H.VibrationSensor, H.ReedSensor, H.SpeedSensor, H.TemperatureSensor, H.UseDeviceOdometer, " +
-	"H.UseDeviceEngineHour, H.FuelSensor, H.Temperature2Sensor " +
-	"FROM dbo.Item I " +
-	"JOIN Config.Hardware H " +
-	"ON I.HardwareID = H.HardwareID " +
-	"WHERE IMEI = @IMEI;";
-
 var SERVER_STATS_QUERY =
 	"SELECT TOP 5 * FROM [192.168.7.80\\MSSQLBeta].positionlogic.dbo.templogsize WHERE ServerName = @server ORDER BY Created DESC " +
 	"CREATE TABLE #OpenTranStatus ( ActiveTransaction varchar(25),Details sql_variant) " +
@@ -119,21 +104,17 @@ module.exports = function (app) {
 				server: rq.params.server,
 				database: rq.params.installation
 			},
-			response = { processing: [] };
+			response = { processing: [] },
+			ProcessHistory = require('./process'),
+			processingService = new ProcessHistory (cfg);
 
-		cnn = new sql.Connection(cfg, function (err) {
-			if (err) {
+		processingService.getRecentHistoryDelta(
+			function (err) {
 				response.err = err;
-				return rs.json(response);
-			}
-
-			cnn.request().query(PROCESSES_QUERY, function (err, rows) {
-                if(err) {
-                	response.err = err;
-					return rs.json(response);
-                }
-
-                rows.forEach(function (row) {
+				rs.json(response);
+			},
+			function (rows) {
+				rows.forEach(function (row) {
                 	response.processing.push({
 						process: row.ProcessName,
 						currentID: row.LastID,
@@ -142,9 +123,8 @@ module.exports = function (app) {
 					});
 				});
 
-			return rs.json(response);
+				rs.json(response);
 			});
-		});
 	});
 
 	app.get('/api/:installation/:server/:imei', function (rq, rs) {
@@ -154,38 +134,18 @@ module.exports = function (app) {
 				server: rq.params.server, 
 				database: rq.params.installation 
 			},
-			response = {};
+			response = { items: [] },
+			UnitDataService = require('./unit'),
+			unitService = new UnitDataService(cfg);
 
-		cnn = new sql.Connection(cfg, function (err) {
-			if (err) {
-				response.err = err;
-				return rs.json(response);
-			}
-
-			var statement = new sql.PreparedStatement(cnn);
-
-			statement.input('IMEI', sql.NVarChar);
-			statement.prepare(UNIT_INFORMATION_QUERY, function (err) {
-
-				if (err) {
+			unitService.getDetailedInformation(
+				rq.params.imei,
+				function (err) {
+					console.log(err);
 					response.err = err;
-					return rs.json(response);
-				}
-
-				statement.execute({ IMEI: rq.params.imei }, function (err, rows) {
-
-					if (err) {
-						response.err = err;
-						return rs.json(response);
-					}
-
-					if(rows.length === 0) {
-						response.err = { message: 'No information was found associated to this IMEI.', notfound: true };
-						return rs.json(response);	
-					}
-								
-					response.items = [];
-
+					rs.json(response);
+				},
+				function (rows) {
 					rows.forEach(function (row) {
 						response.items.push({
 							id: row.ItemID,
@@ -211,12 +171,12 @@ module.exports = function (app) {
 									two: row.Temperature2Sensor
 									},
 								fuel: row.FuelSensor
-								}
+								}	
 							});
-						});
+						}
+					);
 					rs.json(response);
-				});
-			});
-		});
+				}
+			);
 	});
 };
