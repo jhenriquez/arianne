@@ -41,10 +41,6 @@ angular.module('ApplicationModule')
 			$current.installation = installation;
 		};
 
-		$scope.current = function current () {
-			return $current.installation;
-		};
-
 		$scope.redirectUnit = function redirectUnit () {
 			var url = $current.installation.name + '/';
 			url += $current.imei ? $current.imei : 'units';
@@ -122,7 +118,7 @@ angular.module('ApplicationModule')
 				$location.path($routeParams.installation + '/notfound');
 			if ($current.installation != undefined && $current.installation.name != rs.installation.name)
 				$current.imei = undefined;
-			$scope.installation = $current.installation = rs.installation;
+			$current.installation = rs.installation;
 			$scope.requestStats();
 		});
 	})
@@ -252,23 +248,22 @@ angular.module('ApplicationModule')
 
 	})
 	.controller('authenticationController', function ($scope, $modalInstance, $http, $window) {
-		$scope.$on('auth:login-successful', function() {
-			$modalInstance.close();
-		});
+		$scope.cancel = function cancel () {
+			$modalInstance.dismiss('Cancellation');
+		}
 
-		$scope.$on('auth:login-cancelled', function() {
-			$modalInstance.close();
-		});
-
-		$scope.authenticate = function () {
+		$scope.authenticate = function authenticate () {
 			$scope.requestingAuthentication = true;
+			$scope.onErrMessage = '';
 			$http.post('/authenticate', { username: $scope.username, password: $scope.password })
 				.success(function (rs) {
 					delete $scope.requestingAuthentication;
-					if (!rs.err) {
-						$window.sessionStorage.token = rs.token;
-						$modalInstance.close('success');
+					if (rs.err) {
+						return $scope.onErrMessage = rs.err.message;
 					}
+
+					$window.sessionStorage.token = rs.token;
+					$modalInstance.close('success');
 				});
 		};
 	});
