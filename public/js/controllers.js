@@ -1,7 +1,23 @@
 "use strict";
 
 angular.module('ApplicationModule')
-	.controller('HomeController', function ($scope, $installationService, $current, $location) {
+	.controller('HomeController', function ($scope, $installationService, $current, $location, $modal, $authenticationService, $userService) {
+
+		$scope.$current = $current;
+
+		$scope.$on('auth:authentication-required', function (e, args) {
+			$modal.open({
+				templateUrl: 'partials/login-form.html',
+				controller: 'authenticationController',
+				backdrop: 'static'
+			}).result.then(
+				function(rs) {
+					$authenticationService.loginSuccessful();
+				},
+				function() {
+					$authenticationService.loginCancelled();	
+				});
+		});
 
 		$scope.searchInstallations = function searchInstallations () {
 			if(!$scope.searchValue) {
@@ -20,7 +36,7 @@ angular.module('ApplicationModule')
 		$scope.selectCustomer = function selectCustomer (installation) {
 			$scope.installations = [];
 			$scope.searchValue = '';
-			if ($current.installation != undefined && $current.installation.name != rs.installation.name)
+			if ($current.installation != undefined && $current.installation.name != installation.name)
 				$current.imei = undefined;
 			$current.installation = installation;
 		};
@@ -49,6 +65,18 @@ angular.module('ApplicationModule')
 			clazz += $current.installation ? '' : 'disabled';
 			return clazz.trim();
 		};
+
+		function getCurrentUserInformation () {
+			$scope.loadingUserInformation = true;
+			$userService.whoAmI({}, function (rs) {
+				if(rs.err)
+					return alert(rs.err.message);
+				$current.user = rs.user;
+				delete $scope.loadingUserInformation;
+			});
+		};
+
+		getCurrentUserInformation();
 	})
 	.controller('InstallationController', function ($scope, $installationService, $routeParams, $current, $location) {
 		$scope.requestStats = function requestStats () {
@@ -84,6 +112,11 @@ angular.module('ApplicationModule')
 			$scope.requestStats();
 		};
 
+		$scope.unitSearch = function unitSearch () {
+			if($scope.imei)
+				$location.path($routeParams.installation + '/' + $scope.imei);
+		};
+
 		$installationService.get({ name: $routeParams.installation }, function (rs) {
 			if(rs.err)
 				$location.path($routeParams.installation + '/notfound');
@@ -97,11 +130,6 @@ angular.module('ApplicationModule')
 		$scope.params = $routeParams;
 	})
 	.controller('UnitController', function ($scope, $routeParams, $current, $location, $unitService, $installationService) {
-
-		$scope.search = function search () {
-			if($scope.imei)
-				$location.path($routeParams.installation + '/' + $scope.imei);
-		}
 
 		$scope.requestUnitInformation = function requestUnitInformation () {
 			if(!$routeParams.imei)
@@ -222,5 +250,25 @@ angular.module('ApplicationModule')
 			$scope.servers = response.servers;
 		});
 
+	})
+	.controller('authenticationController', function ($scope, $modalInstance, $http, $window) {
+		$scope.$on('auth:login-successful', function() {
+			$modalInstance.close();
+		});
+
+		$scope.$on('auth:login-cancelled', function() {
+			$modalInstance.close();
+		});
+
+		$scope.authenticate = function () {
+			$scope.requestingAuthentication = true;
+			$http.post('/authenticate', { username: $scope.username, password: $scope.password })
+				.success(function (rs) {
+					delete $scope.requestingAuthentication;
+					if (!rs.err) {
+						$window.sessionStorage.token = rs.token;
+						$modalInstance.close('success');
+					}
+				});
+		};
 	});
-	

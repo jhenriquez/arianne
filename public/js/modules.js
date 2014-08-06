@@ -2,8 +2,8 @@
 
 angular.module('CustomDirectives', []);
 
-angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives'])
-	.config(function($interpolateProvider, $routeProvider, $locationProvider) {
+angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives', 'ui.bootstrap', 'TokenAuthentication'])
+	.config(function($interpolateProvider, $routeProvider, $locationProvider, $httpProvider, $handleForbidden, $tokenInjector) {
 		// configure angular binding interpolation symbols
 		$interpolateProvider.startSymbol('<%=');
 		$interpolateProvider.endSymbol('%>');
@@ -11,31 +11,30 @@ angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives'
 		// configure routes
 		$routeProvider
 			.when('/servers', {
-				templateUrl: 'maintenance-general.html',
+				templateUrl: 'partials/maintenance-general.html',
 				controller: 'MaintenanceController'
 			})
 			.when('/:installation', {
-				templateUrl: 'installation-general.html',
+				templateUrl: 'partials/installation-general.html',
 				controller: 'InstallationController'
 			})
 			.when('/:installation/notfound', {
-				templateUrl: 'installation-notfound.html',
+				templateUrl: 'partials/installation-notfound.html',
 				controller: 'PartialErrorController'	
 			})
-			.when('/:installation/units', {
-				templateUrl: 'unit-search.html',
-				controller: 'UnitController'
-			})
 			.when('/:installation/:imei', {
-				templateUrl: 'unit-general.html',
-				controller: 'UnitController'
-			})
-			.when('/:installation/:imei/:item', {
-				templateUrl: 'unit-general.html',
+				templateUrl: 'partials/unit-general.html',
 				controller: 'UnitController'
 			})
 			.when('/:installation/:imei/notfound', {
-				templateUrl: 'unit-notfound.html',
+				templateUrl: 'partials/unit-notfound.html',
 				controller: 'PartialErrorController'
+			})
+			.when('/:installation/:imei/:item', {
+				templateUrl: 'partials/unit-general.html',
+				controller: 'UnitController'
 			});
+
+			$httpProvider.interceptors.push($tokenInjector);
+			$httpProvider.interceptors.push($handleForbidden);
 	});

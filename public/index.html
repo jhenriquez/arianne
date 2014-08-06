@@ -1,14 +1,19 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		{% include "./templates/head_template.html" %}
+		<title>Arianne : 0.0.0</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+		<link href="//cdn.jsdelivr.net/animatecss/3.1.0/animate.min.css" rel="stylesheet">
+		<link href="/css/app.css" rel="stylesheet">
 	</head>
 	<body>
 		<div class="container" ng-app="ApplicationModule" ng-controller="HomeController">
 			<div class="row">
 				<div class="col-md-2 col-md-offset-10 login-area">
 					<div class="dropdown">
-						<a class="anchor-linkless-pointer" data-toggle="dropdown">{{user.username}}
+						<a class="anchor-linkless-pointer" data-toggle="dropdown"><%=$current.user.username%>
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu" role="menu">
@@ -59,9 +64,6 @@
 						<div ng-class="isNavigationEnabled()" ng-click="redirectInstallation()">
 							<i class="fa fa-home fa-fw"></i>&nbsp; Installation
 						</div>
-						<div ng-class="isNavigationEnabled()" ng-click="redirectUnit()"> 
-							<i class="fa fa-space-shuttle fa-fw"></i>&nbsp; Unit
-						</div>
 						<div class="list-group-item btn-essense" ng-click="redirectMaintenance()">
 							<i class="fa fa-bug fa-fw"></i>&nbsp; Maintenance
 						</div>
@@ -89,7 +91,12 @@
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-route.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-resource.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="/js/token-auth.js"></script>
+
+		<!-- AngularUI Bootstrap Modal Service -->
+		<script src="/js/ng-bootstrap/ui-bootstrap-custom-0.10.0.min.js"></script>
+		<script src="/js/ng-bootstrap/ui-bootstrap-custom-tpls-0.10.0.min.js"></script>
 
 		<!-- Application Specific JavaScript -->
 		<script src="/js/app.js"></script>

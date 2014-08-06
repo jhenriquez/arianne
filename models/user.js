@@ -5,7 +5,8 @@ var goose = require('mongoose'),
 
 var userSchema = new Schema({
 	username: String,
-	password: String
+	password: String,
+	name: String
 });
 
 userSchema.methods.setPassword = function (password) {
