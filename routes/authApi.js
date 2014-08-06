@@ -20,7 +20,7 @@ module.exports = function (app) {
 				email: user.email
 			};
 
-			var token = jwt.sign(profile, 'I\'m King!', { expiresInMinutes : 30 });
+			var token = jwt.sign(profile, 'I\'m King!', { expiresInMinutes : 60 });
 
 			return rs.json({ token : token });
 		});
