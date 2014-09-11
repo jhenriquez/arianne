@@ -62,6 +62,10 @@ angular.module('ApplicationModule')
 			return clazz.trim();
 		};
 
+		$scope.getClassForBoolean = function getClassForBoolean (boolean) {
+			return boolean ? "fa fa-thumbs-up" : "fa fa-thumbs-down";
+		};
+
 		function getCurrentUserInformation () {
 			$scope.loadingUserInformation = true;
 			$userService.whoAmI({}, function (rs) {
