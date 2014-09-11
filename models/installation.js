@@ -9,6 +9,9 @@ var installationSchema = Schema({
 	dbServer: String,
 	serverName: String,
 	mailSenderName : String,
+	newUI: Boolean,
+	webPool: String,
+	moved: Boolean,
 	engines: {
 		engine: String,
 		geocode: String,

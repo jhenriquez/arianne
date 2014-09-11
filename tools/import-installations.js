@@ -32,6 +32,9 @@ var cn = new sql.Connection(config, function (err) {
                         language: row.Language,
                         dbServer: row.DBServer.replace('[','').replace(']',''),
                         serverName: row.DBServer,
+                        newUI: row.NewUI,
+                        webPool: row.WebPool,
+                        moved: row.MovedToAtlanta,
                         engines: {
                         	engine: row.MsgEngineServer,
                         	geocode: row.GeoCodeEngine,
@@ -45,10 +48,8 @@ var cn = new sql.Connection(config, function (err) {
                 function (err, updated) {
 					if(err) throw err;
 					total++;
-
                     if(total == rows.length) {
                         console.log(total);
-
                         mongoose.disconnect();
                         cn.close();
                     }
