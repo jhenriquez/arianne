@@ -1,6 +1,6 @@
 var db = {
 	kingslanding : {
-		server: "192.168.7.80\\MSSQLBETA",
+		server: "10.0.7.27",
 		username: "logictrack",
 		password: "#2show!t"
 	},
