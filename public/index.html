@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<title>Arianne : 0.0.0</title>
+		<title>Arianne : 0.0.1</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
@@ -9,95 +9,103 @@
 		<link href="/css/app.css" rel="stylesheet">
 	</head>
 	<body>
-		<div class="container" ng-app="ApplicationModule" ng-controller="HomeController">
-			<div class="row">
-				<div class="col-md-2 col-md-offset-10 login-area">
-					<div class="dropdown">
-						<a class="anchor-linkless-pointer" data-toggle="dropdown"><%=$current.user.username%>
-							<span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu" role="menu">
-							<li role="presentation">
-								<a href="#">User Profile</a>
-							</li>
-							<li class="separator"></li>
-							<li role="presentation">
-								<a href="/logout">logout</a>
-							</li>
-					 	</ul>
+		<div ng-app="ApplicationModule" ng-controller="HomeController">
+			<div class="page-header header-area">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-4 logo-area">
+							<h2 class="logo-text"><a class="logo-name" ng-click="redirectHome()">Arianne</a> <small>Unbowed, Unbent, Unbroken</small></h2>
+						</div>
+						<div class="col-md-7">
+							<nav class="nav">
+								<a class="nav-item" ng-class="{active: currentTab == 0}" ng-click="redirectInstallation()">Installations</a>
+								<a class="nav-item" ng-class="{active: currentTab == 1}" ng-click="redirectMaintenance()">Maintenance</a>
+							</nav>
+						</div>
+						<div class="col-md-1 login-area">
+							<div class="dropdown">
+								<a class="anchor-linkless-pointer" data-toggle="dropdown"><%=$current.user.username%>
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu">
+									<li role="presentation">
+										<a href="#">User Profile</a>
+									</li>
+									<li class="separator"></li>
+									<li role="presentation">
+										<a href="/logout">logout</a>
+									</li>
+							 	</ul>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="page-header">
-				<h2>Arianne <small>Unbowed, Unbent, Unbroken</small></h2>
-			</div>
-			<div class="row">
-				<div class="col-md-6 col-md-offset-3">
-					<div id="search-box" class="form-group">
-							<input
-								type="text"
-								placeholder="Search Customers"
-								class="form-control"
-								ng-model="searchValue"
-								ng-change="searchInstallations()"
-								/>
-					</div>
-					<div class="list-group hover-drop">
-						<a href="#<%=installation.name%>"
-							class="list-group-item"
-							ng-repeat="installation in installations"
-							ng-click="selectCustomer(installation)"
-							>
-							<h4 class="list-group-item-heading">
-								<i class="fa fa-home fa-fw"></i>&nbsp; <%=installation.name%>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3">
+						<div>
+							<div id="search-box" class="form-group">
+								<input type="text" placeholder="Search Customers"
+									class="form-control" ng-model="searchValue" ng-change="searchInstallations()"/>
+							</div>
+							<div class="list-group">
+								<div ng-repeat="server in servers">
+									<a class="list-group-item list-server" data-toggle="collapse" data-target="#<%=server.id%>"
+										ng-click="searchInstallationsByServer(server.dbase)">
+										<p class="list-group-item-text">
+			    							<i class="fa fa-database fa-fw"></i>&nbsp; <%=server.dbase%>
+											
+											<span ng-hide="searchValue" class="badge rightSide"><%=server.customersLength%></span>
+											<span ng-show="searchValue" class="badge rightSide"><%=server.customers.length%></span>
+			    						</p>
+									</a>
+									<div id="<%=server.id%>" ng-class="{collapse : !searchValue && server.customers.length == 0}"
+										class="list-installations">
+										<div ng-repeat="customer in server.customers">
+											<a href="#<%=customer%>" class="list-group-item installationItem" 
+												ng-click="selectCustomer(customer, server)">
+												<h4 class="list-group-item-heading" >
+													<i class="fa fa-home fa-fw"></i>&nbsp; <%=customer%>
+												</h4>
+											</a>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<div ng-show="$current.installation">
+							<h4>
+								<i class="fa fa-home fa-lg"></i>&nbsp;<%=$current.installation.name%>
 							</h4>
-    						<p class="list-group-item-text">
-    							<i class="fa fa-database fa-fw"></i>&nbsp; <%=installation.dbase%>
-    						</p>
-						</a>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-3">
-					<div class="list-group">
-						<div ng-class="isNavigationEnabled()" ng-click="redirectInstallation()">
-							<i class="fa fa-home fa-fw"></i>&nbsp; Installation
+							<ul class="list-group">
+								<li class="list-group-item">
+									<i class="fa fa-database fa-fw"></i>
+									&nbsp;DBase:&nbsp;<%=$current.installation.dbase%>
+								</li>
+								<li class="list-group-item">
+									<i class="fa fa-cog fa-fw"></i>
+									&nbsp;Engine:&nbsp;<%=$current.installation.engines.engine%>
+								</li>
+								<li class="list-group-item">
+									<i class="fa fa-cloud-upload fa-fw"></i>
+									&nbsp;Version 8:&nbsp;&nbsp;<i ng-class="getClassForBoolean($current.installation.newUI)"></i>
+								</li>
+								<li class="list-group-item">
+									<i class="fa fa-share fa-fw"></i>
+									&nbsp;Moved:&nbsp;&nbsp;<i ng-class="getClassForBoolean($current.installation.moved)"></i>
+								</li>
+								<li class="list-group-item">
+									<i class="fa fa-sitemap fa-fw"></i>
+									&nbsp;Pool:&nbsp;&nbsp;<%=$current.installation.webPool%>
+								</li>
+							</ul>
 						</div>
-						<div class="list-group-item btn-essense" ng-click="redirectMaintenance()">
-							<i class="fa fa-bug fa-fw"></i>&nbsp; Maintenance
-						</div>
 					</div>
-				</div>
-				<div class="col-md-6">
-					<ng-view />
-				</div>
-				<div class="col-md-3" ng-show="$current.installation">
-						<h4>
-							<i class="fa fa-home fa-lg"></i>&nbsp;<%=$current.installation.name%>
-						</h4>
-						<ul class="list-group">
-							<li class="list-group-item">
-								<i class="fa fa-database fa-fw"></i>
-								&nbsp;DBase:&nbsp;<%=$current.installation.dbase%>
-							</li>
-							<li class="list-group-item">
-								<i class="fa fa-cog fa-fw"></i>
-								&nbsp;Engine:&nbsp;<%=$current.installation.engines.engine%>
-							</li>
-							<li class="list-group-item">
-								<i class="fa fa-cloud-upload fa-fw"></i>
-								&nbsp;Version 8:&nbsp;&nbsp;<i ng-class="getClassForBoolean($current.installation.newUI)"></i>
-							</li>
-							<li class="list-group-item">
-								<i class="fa fa-share fa-fw"></i>
-								&nbsp;Moved:&nbsp;&nbsp;<i ng-class="getClassForBoolean($current.installation.moved)"></i>
-							</li>
-							<li class="list-group-item">
-								<i class="fa fa-sitemap fa-fw"></i>
-								&nbsp;Pool:&nbsp;&nbsp;<%=$current.installation.webPool%>
-							</li>
-						</ul>
+					<div class="col-md-9">
+						<ng-view />
+					</div>
 				</div>
 			</div>
 		</div>
