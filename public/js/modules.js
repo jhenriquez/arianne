@@ -3,10 +3,7 @@
 angular.module('CustomDirectives', []);
 
 angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives', 'ui.bootstrap', 'TokenAuthentication'])
-	.config(function($interpolateProvider, $routeProvider, $locationProvider, $httpProvider, $handleForbidden, $tokenInjector) {
-		// configure angular binding interpolation symbols
-		$interpolateProvider.startSymbol('<%=');
-		$interpolateProvider.endSymbol('%>');
+	.config(function($routeProvider, $locationProvider, $httpProvider, $handleForbidden, $tokenInjector) {
 
 		// configure routes
 		$routeProvider

@@ -1,6 +1,6 @@
 <section ng-show="selected">
 	<div class="server-container">
-		<i class="fa fa-database"></i>&nbsp;<%=selected.address%>
+		<i class="fa fa-database"></i>&nbsp;{{selected.address}}
 	</div>
 	<div class="row">
 		<div class="col-md-3">
@@ -16,7 +16,7 @@
 			class="col-md-12"
 			cs-selectable="selected">
 			<div class="server-container btn-essense" ng-click="select(current)" ng-repeat="current in servers">
-				<i class="fa fa-database"></i>&nbsp;<%=current.address%>
+				<i class="fa fa-database"></i>&nbsp;{{current.address}}
 			</div>
 		</div>
 	</div>
@@ -62,8 +62,8 @@
 	      			<h3 class="page-header">Process Details</h3>
 		      		<div class="row">
 		      			<div class="col-md-8">
-		      				<strong>Name:</strong>&nbsp;<%=process.EventInfo%><br/>
-		      				<strong>ID:</strong>&nbsp;<span class="text-danger"><%=processId%></span>
+		      				<strong>Name:</strong>&nbsp;{{process.EventInfo}}<br/>
+		      				<strong>ID:</strong>&nbsp;<span class="text-danger">{{processId}}</span>
 		      			</div>
 		      			<div class="col-md-4">
 		      				<button class="btn btn-danger">Kill It With Fire!</button>
@@ -81,10 +81,10 @@
 							    		<th>LogState</th>
 							    	</tr>
 							    	<tr ng-repeat="log in tempLogSizes">
-							    		<td><%=log.Created%></td>
-							    		<td><%=log.Logsize%></td>
-							    		<td><%=log.Status%></td>
-							    		<td><%=log.LogState%></td>
+							    		<td>{{log.Created}}</td>
+							    		<td>{{log.Logsize}}</td>
+							    		<td>{{log.Status}}</td>
+							    		<td>{{log.LogState}}</td>
 							    	<tr>
 								</table>
 							</div>
