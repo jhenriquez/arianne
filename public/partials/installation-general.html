@@ -64,8 +64,8 @@
 	  	<div class="col-sm-4" ng-repeat="process in serverStats">
 	    	<div class="engine-stats">
 		        <i class="fa fa-cogs fa-lg"></i>
-		        <%=process.process.replace('Engine.','')%>
-		        <h4 class="text-center"><%=process.delta%></h4>
+		        {{process.process.replace('Engine.','')}}
+		        <h4 class="text-center">{{process.delta}}</h4>
 		    </div>
 		</div>
 	</div>

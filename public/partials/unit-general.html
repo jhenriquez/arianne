@@ -31,10 +31,10 @@
 		<a 
 			class="list-group-item"
 			ng-repeat="item in items"
-			href="#/<%=installation.name%>/<%=item.imei%>/<%=item.id%>"
+			href="#/{{installation.name}}/{{item.imei}}/{{item.id}}"
 			>
-			<strong><%=item.name%></strong> (<%=item.id%>)<br />
-			Status: <%=item.status%>
+			<strong>{{item.name}}</strong> ({{item.id}})<br />
+			Status: {{item.status}}
 		</a>
 	</div>
 </div>
@@ -43,10 +43,10 @@
 		<h3 class="header">Device Information</h3>
 		<div class="row">
 			<div class="col-md-12">
-				Item Name: <%=item.name%><br />
-				itemID: <%=item.id%><br />
-				Status: <%=item.status%><br />
-				IMEI: <%=item.imei%><br />
+				{{item.name}}<br />
+				{{item.id}}<br />
+				{{item.status}}<br />
+				{{item.imei}}<br />
 			</div>
 		</div>
 	</section>
@@ -54,10 +54,10 @@
 		<h3 class="header">Hardware Profile</h3>
 		<div class="row">
 			<div class="col-md-12">
-				Hardware Name: <%=item.hardware.name%><br />
-				HardwareID: <%=item.hardware.id%><br />
-				Parser: <%=item.hardware.parser%><br />
-				Port Number: <%=item.hardware.ports%><br />
+				{{item.hardware.name}}<br />
+				{{item.hardware.id}}<br />
+				{{item.hardware.parser}}<br />
+				{{item.hardware.ports}}<br />
 			</div>
 		</div>
 	</section>
@@ -65,14 +65,14 @@
 		<h3 class="header">Sensors</h3>
 		<div class="row">
 			<div class="col-md-12">
-				Ignition: <%=item.sensors.ignition%><br />
-				Battery: <%=item.sensors.battery%><br />
-				Vibration: <%=item.sensors.vibration%><br />
-				Reed: <%=item.sensors.reed%><br />
-				Speed: <%=item.sensors.speed%><br />
-				Fuel: <%=item.sensors.fuel%><br />
-				Temperature One: <%=item.sensors.temperature.one%><br />
-				Temperature Two: <%=item.sensors.temperature.two%><br />
+				Ignition: {{item.sensors.ignition}}<br />
+				Battery: {{item.sensors.battery}}<br />
+				Vibration: {{item.sensors.vibration}}<br />
+				Reed: {{item.sensors.reed}}<br />
+				Speed: {{item.sensors.speed}}<br />
+				Fuel: {{item.sensors.fuel}}<br />
+				Temperature One: {{item.sensors.temperature.one}}<br />
+				Temperature Two: {{item.sensors.temperature.two}}<br />
 			</div>
 		</div>
 	</section>

@@ -43,6 +43,12 @@ angular.module('ApplicationModule')
 			});
 		};
 
+		$scope.isNavigationEnabled = function isNavigationEnabled () {
+			var clazz = 'list-group-item btn-essense ';
+			clazz += $current.installation ? '' : 'disabled';
+			return clazz.trim();
+		};
+
 		$scope.searchInstallations = function searchInstallations () {
 			if(!$scope.searchValue) 
 				return;
