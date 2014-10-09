@@ -16,10 +16,26 @@ var SERVER_STATS_QUERY =
 module.exports = function (app) {
 	app.get('/api/installation/search/:search', function (rq, rs) {
 		Installation.find({ name: { $regex : new RegExp(rq.params.search, 'i') } }, {}, { limit: 10 },
-				function (err, installations) {
-					if(err) return rs.json([{ err : err }]); 
-					rs.json(installations);
-				});     
+			function (err, installations) {
+				if(err) return rs.json([{ err : err }]); 
+				rs.json(installations);
+			});     
+	});
+
+	app.get('/api/installation/searchByServer/:search', function (rq, rs) {
+		Installation.find({ dbase: rq.params.search}, {},
+			function (err, installations) {
+				if(err) return rs.json([{ err : err }]); 
+				rs.json(installations);
+			});     
+	});
+
+	app.get('/api/installation/serversInfo', function(rq, rs){
+		Installation.aggregate([{$group : {_id : "$dbase", count : {$sum : 1}}}], 
+			function(err, servers){
+				if(err) return rs.json([{ err : err }]); 
+				rs.json(servers);
+			});
 	});
 
 	app.get('/api/installation/:name', function (rq, rs) {
@@ -95,6 +111,22 @@ module.exports = function (app) {
 					});
 				});
 			});
+	});
+
+	app.get('/api/:installation/:server/siteUsers', function (rq, rs){
+		var cfg = { 
+				user : databases.kingslanding.username,
+				password: databases.kingslanding.password,
+				server: rq.params.server,
+				database: rq.params.installation
+			},
+			ClientService = require("./client"),
+			clientService = new ClientService(cfg);
+
+		clientService.getSiteUsers(
+			function(err){ rs.json({ err : err}); },
+			function(rows){ rs.json({ users : rows}); }
+		);
 	});
 
 	app.get('/api/:installation/:server/processing', function (rq, rs) {

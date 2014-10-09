@@ -8,10 +8,22 @@
     animation: bounceInRight 0.10s;	
 }
 
-.hover-drop {
-	position: absolute;
-	width: 95%;
-	z-index: 3;
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background-color: #eaeaea;
+  border-left: 1px solid #ccc;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.rightSide{
+  float: right;
 }
 
 .inline-button {
@@ -24,14 +36,92 @@
   background-color: lightgray;
 }
 
+.nav-item {
+  position: relative;
+  display: inline-block;
+  padding: 10px;
+  padding-top: 15px;
+  padding-bottom: 5px;
+  font-weight: 500;
+  color: #777;
+}
+
+.nav-item:hover, .nav-item:focus, .active{
+  color: #777;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav .active:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  vertical-align: middle;
+  content: " ";
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid;
+  border-left: 5px solid transparent;
+}
+
 .btn-essense.disabled {
   pointer-events: none;
   color: gray;
 }
 
-.login-area {
+.logo-area{
+  padding-right: 0px;
+}
+
+.logo-text{
   margin-top: 5px;
-  text-align: center;
+  margin-bottom: 0px;
+}
+
+.logo-name{
+  text-decoration: none !important;
+  color: black;
+}
+
+.login-area {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.header-area{
+  margin-top: 0px;
+  padding-bottom: 0px;
+  background-color: #f8f8f8;
+  border-color: #777;
+}
+
+.list-installations{
+  overflow-y: auto;
+  max-height: 250px;
+}
+
+.installationItem{
+  padding: 5px;
+  padding-left: 25px;
+}
+
+.list-server{
+  background-color: #f8f8f8;
+}
+
+.page-orienatation{
+  margin-top: 10px;
+}
+
+.table-Pagination{
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+.tiny-Cell{
+  padding: 4px !important;
 }
 
 .anchor-linkless-pointer {
