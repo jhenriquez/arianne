@@ -3,9 +3,7 @@
 angular.module('ApplicationModule')
 	.controller('HomeController', function ($scope, $installationService, $current, $location, $modal, $authenticationService, $userService) {
 		$scope.$current = $current;
-		$scope.servers = [];
-		$scope.serversDic = {};
-		
+
 		$scope.$on('auth:authentication-required', function (e, args) {
 			$modal.open({
 				templateUrl: 'partials/login-form.html',
@@ -20,84 +18,26 @@ angular.module('ApplicationModule')
 				});
 		});
 
-		$scope.removeCustomers = function removeCustomers(){
-			for (var i = $scope.servers.length - 1; i >= 0; i--) {
-				$scope.servers[i].customers = [];
-			};
-		};
-
-		$scope.searchServers = function searchServers(){
-			$installationService.getServers(function(servers){
-				servers.forEach(function(server){
-					if(!$scope.servers[server]){
-						$scope.servers.push({
-							dbase : server._id, 
-							id : server._id.split(".").join(""),
-							customersLength : server.count,
-							customers : []
-						});
-
-						$scope.serversDic[server._id] = { index : $scope.servers.length - 1};
-					}
-				});
-			});
-		};
-
-		$scope.isNavigationEnabled = function isNavigationEnabled () {
-			var clazz = 'list-group-item btn-essense ';
-			clazz += $current.installation ? '' : 'disabled';
-			return clazz.trim();
-		};
-
 		$scope.searchInstallations = function searchInstallations () {
-			if(!$scope.searchValue) 
+			if(!$scope.searchValue) {
+				$scope.installations = [];
 				return;
-			
+			}
+
 			$scope.isLoading = true;
 
 			$installationService.search({for: $scope.searchValue }, function (installations) {
 				$scope.isLoading = false;
-
-				$scope.removeCustomers();
-
-				installations.forEach(function(installation){
-					var obj = $scope.servers[$scope.serversDic[installation.dbase].index];
-
-					obj.customers.push(installation.name);
-				});
+				$scope.installations = installations;
 			});
 		};
 
-		$scope.searchInstallationsByServer = function searchInstallationsByServer(server){
-			if($scope.searchValue) return;
-
-			var obj = $scope.servers[$scope.serversDic[server].index];
-
-			if(obj.customers.length > 0 && !$scope.searchValue) return;
-
-			obj.customers = [];
-
-			$scope.isLoading = true;
-
-			$installationService.searchByServer({for : server}, function(installations){
-				$scope.isLoading = false;
-
-				installations.forEach(function(installation){
-					obj.customers.push(installation.name);
-				});
-			});
-		};
-
-		$scope.selectCustomer = function selectCustomer (customer, server) {
-			if($scope.searchValue){
-				$scope.searchValue = "";
-				$scope.removeCustomers();
-			}
-
-			if ($current.installation != undefined && $current.installation.name != customer)
+		$scope.selectCustomer = function selectCustomer (installation) {
+			$scope.installations = [];
+			$scope.searchValue = '';
+			if ($current.installation != undefined && $current.installation.name != installation.name)
 				$current.imei = undefined;
-
-			$current.installation = { name : customer, dbase : server.dbase};
+			$current.installation = installation;
 		};
 
 		$scope.redirectUnit = function redirectUnit () {
@@ -107,31 +47,18 @@ angular.module('ApplicationModule')
 			return url;
 		};
 
-		$scope.checkTabFromUrl = function checkTabFromUrl(){
-			 switch($location.$$url){
-			 	case "/servers": return 1;
-			 	default: return 0;
-			 }
-		};
-
-		$scope.redirectHome = function redirectHome () {
-			$scope.currentTab = 0;
-			$current.installation = null;
-			$location.path('/');
-		};
-
 		$scope.redirectMaintenance = function redirectMaintenance () {
-			$scope.currentTab = 1;
 			$location.path('/servers');
 		};
 
 		$scope.redirectInstallation = function redirectInstallation () {
-			$scope.currentTab = 0;
+			$location.path('/'+$current.installation.name);
+		};
 
-			if($current.installation)
-				$location.path('/'+ $current.installation.name);
-			else
-				$location.path('/');
+		$scope.isNavigationEnabled = function isNavigationEnabled () {
+			var clazz = 'list-group-item btn-essense ';
+			clazz += $current.installation ? '' : 'disabled';
+			return clazz.trim();
 		};
 
 		$scope.getClassForBoolean = function getClassForBoolean (boolean) {
@@ -149,8 +76,6 @@ angular.module('ApplicationModule')
 		};
 
 		getCurrentUserInformation();
-		$scope.searchServers();
-		$scope.currentTab = $scope.checkTabFromUrl();
 	})
 	.controller('InstallationController', function ($scope, $installationService, $clientService, $routeParams, $current, $location) {
 		$scope.requestStats = function requestStats () {

@@ -36,6 +36,12 @@
   background-color: lightgray;
 }
 
+.hover-drop {
+  position: absolute;
+  width: 95%;
+  z-index: 3;
+}
+
 .nav-item {
   position: relative;
   display: inline-block;
