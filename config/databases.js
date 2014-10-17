@@ -1,8 +1,8 @@
 var db = {
 	kingslanding : {
-		server: "10.0.7.27",
-		username: "logictrack",
-		password: "#2show!t"
+		server: "",
+		username: "",
+		password: ""
 	},
 	oberyn : "mongodb://localhost/dorne-development",
 	doran : "" // production database
