@@ -14,7 +14,7 @@ angular.module('ApplicationModule')
 					$authenticationService.loginSuccessful();
 				},
 				function() {
-					$authenticationService.loginCancelled();	
+					$authenticationService.loginCancelled();
 				});
 		});
 
@@ -77,7 +77,7 @@ angular.module('ApplicationModule')
 
 		getCurrentUserInformation();
 	})
-	.controller('InstallationController', function ($scope, $installationService, $clientService, $routeParams, $current, $location) {
+	.controller('InstallationController', function ($scope, $installationService, $clientService, $stateParams, $current, $location) {
 		$scope.requestStats = function requestStats () {
 			if($scope.repeatLoading === undefined) {
 				$scope.isLoading = true;
@@ -113,38 +113,38 @@ angular.module('ApplicationModule')
 
 		$scope.unitSearch = function unitSearch () {
 			if($scope.imei)
-				$location.path($routeParams.installation + '/' + $scope.imei);
+				$location.path($stateParams.installation + '/' + $scope.imei);
 		};
 
-		$installationService.get({ name: $routeParams.installation }, function (rs) {
+		$installationService.get({ name: $stateParams.installation }, function (rs) {
 			if(rs.err)
-				$location.path($routeParams.installation + '/notfound');
+				$location.path($stateParams.installation + '/notfound');
 			if ($current.installation != undefined && $current.installation.name != rs.installation.name)
 				$current.imei = undefined;
 			$current.installation = rs.installation;
 			$scope.requestStats();
 		});
 	})
-	.controller('PartialErrorController', function ($scope, $routeParams) {
-		$scope.params = $routeParams;
+	.controller('PartialErrorController', function ($scope, $stateParams) {
+		$scope.params = $stateParams;
 	})
-	.controller('UnitController', function ($scope, $routeParams, $current, $location, $unitService, $installationService) {
+	.controller('UnitController', function ($scope, $stateParams, $current, $location, $unitService, $installationService) {
 
 		$scope.requestUnitInformation = function requestUnitInformation () {
-			if(!$routeParams.imei)
+			if(!$stateParams.imei)
 				return;
 			$scope.requestLoading = true;
-			$unitService.search({installation: $routeParams.installation, imei: $routeParams.imei, server: $current.installation.dbase },
+			$unitService.search({installation: $stateParams.installation, imei: $stateParams.imei, server: $current.installation.dbase },
 				function (response) {
 					$scope.requestLoading = false;
 					if(response.err) {
 						if(response.err.notfound)
-							return $location.path($routeParams.installation+'/'+$routeParams.imei+'/notfound');
+							return $location.path($stateParams.installation+'/'+$stateParams.imei+'/notfound');
 
 						return $scope.requestError = true;
 					}
 
-					$current.imei = $routeParams.imei;
+					$current.imei = $stateParams.imei;
 
 					if (response.items.length === 1) {
 						$scope.item = response.items[0];
@@ -153,9 +153,9 @@ angular.module('ApplicationModule')
 						$scope.isMultiple = true;
 					}
 
-					if ($routeParams.item) {
+					if ($stateParams.item) {
 						$scope.items.forEach(function (i) {
-							if(i.id == $routeParams.item) {
+							if(i.id == $stateParams.item) {
 								$scope.isMultiple = false;
 								$scope.item = i;
 							}
@@ -167,10 +167,10 @@ angular.module('ApplicationModule')
 			});
 		}
 
-		$installationService.get({ name: $routeParams.installation }, function (rs) {
+		$installationService.get({ name: $stateParams.installation }, function (rs) {
 			if(rs.err) {
 				if(rs.err.notfound)
-					$location.path($routeParams.installation + '/notfound');
+					$location.path($stateParams.installation + '/notfound');
 			}
 			if ($current.installation != undefined && $current.installation.name != rs.installation.name)
 				$current.imei = undefined;
@@ -221,7 +221,7 @@ angular.module('ApplicationModule')
 
 		$scope.reloadContextStats  = function reloadTempDBStats () {
 			if(!executionContext.contextFunction) return;
-			
+
 			$scope.isReloadingStats = true;
 			$scope.errReloadingStats = false;
 
