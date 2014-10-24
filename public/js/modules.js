@@ -3,33 +3,23 @@
 angular.module('CustomDirectives', []);
 
 angular.module('ApplicationModule', ['ngResource', 'ngRoute', 'CustomDirectives', 'ui.bootstrap', 'ui.router', 'TokenAuthentication'])
-	.config(function($routeProvider, $locationProvider, $httpProvider, $handleForbidden, $tokenInjector) {
+	.config(function($routeProvider, $locationProvider, $httpProvider, $handleForbidden, $tokenInjector, $stateProvider) {
 
-		// configure routes
-		$routeProvider
-			.when('/servers', {
+		$stateProvider
+			.state('Maintenance', {
+				url: '/servers',
 				templateUrl: 'partials/maintenance-general.html',
 				controller: 'MaintenanceController'
 			})
-			.when('/:installation', {
+			.state('Installation', {
+				url: '/:installation',
 				templateUrl: 'partials/installation-general.html',
 				controller: 'InstallationController'
 			})
-			.when('/:installation/notfound', {
+			.state('InstallationNotFound', {
+				url: '/:installation/notfound',
 				templateUrl: 'partials/installation-notfound.html',
 				controller: 'PartialErrorController'
-			})
-			.when('/:installation/:imei', {
-				templateUrl: 'partials/unit-general.html',
-				controller: 'UnitController'
-			})
-			.when('/:installation/:imei/notfound', {
-				templateUrl: 'partials/unit-notfound.html',
-				controller: 'PartialErrorController'
-			})
-			.when('/:installation/:imei/:item', {
-				templateUrl: 'partials/unit-general.html',
-				controller: 'UnitController'
 			});
 
 			$httpProvider.interceptors.push($tokenInjector);
